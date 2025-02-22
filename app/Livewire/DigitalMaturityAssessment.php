@@ -1,0 +1,548 @@
+<?php
+
+namespace App\Livewire;
+
+use Livewire\Component;
+
+use function Ramsey\Uuid\v1;
+
+class DigitalMaturityAssessment extends Component
+{
+    public $currentSection = 0;
+    public $answers = [];
+    public $showResults = false;
+
+    protected $sections = [
+        // category 1
+        'Business Information & Digital Strategy' => [
+            [
+                'id' => 'category_1_q1',
+                'type' => 'select',
+                'question' => 'Does your business operate in multiple states?',
+                'instruction' => '',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+
+                'id' => 'category_1_q2',
+                'type' => 'checkbox',
+                'question' => 'In which of the following ways is your enterprise prepared for (more) digitalization? ',
+                'instruction' => 'select all that apply.',
+                'options' => [
+                    ['text' => 'My business has a clear digital plan (e.g., website, social media, mobile platforms).', 'points' => 1/2],
+                    ['text' => 'We regularly review our digital approach to stay competitive.', 'points' => 1],
+                    ['text' => 'Our digital strategy is aligned with our overall business goals.', 'points' => 2],
+                    ['text' => 'We set measurable goals for our digital initiatives.', 'points' => 3],
+                    ['text' => 'We actively use digital channels (social media, online ads) to promote our products/services.', 'points' => 1],
+                    ['text' => 'We monitor digital trends and competitor activities to update our digital strategy', 'points' => 4],
+                    ['text' => 'We have secured the necessary financial resources and IT infrastructure for digitalization.', 'points' => 4],
+                    ['text' => 'We regularly track customer feedback and performance data from online interactions.', 'points' => 4],
+                ],
+            ],
+
+        ],
+
+        // category 2
+        'Internet Access, Technology Use & Digital Readiness' => [
+            [
+
+                'id' => 'category_2_q1',
+                'type' => 'select',
+                'question' => 'Does your business have an active internet connection?',
+                'instruction' => '',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+
+                'id' => 'category_2_q2',
+                'type' => 'checkbox',
+                'question' => 'Which of the following devices are used in your business? ',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Smartphone', 'points' => 1],
+                    ['text' => 'Laptop/Desktop', 'points' => 1],
+                    ['text' => 'Tablet', 'points' => 1],
+                    ['text' => 'Point of Sale (POS) terminal', 'points' => 1],
+                    ['text' => 'Barcode, QR, or RFID scanner', 'points' => 1],
+                ],
+            ],
+
+            [
+
+                'id' => 'category_2_q3',
+                'type' => 'checkbox',
+                'question' => 'Which of the following digital technologies and solutions are already used by your enterprise? (Select all that apply) ',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Connectivity & Cloud Services (e.g., Google Drive, OneDrive, high-speed fiber internet, cloud computing, remote office access)', 'points' => 1],
+                    ['text' => 'Digital tools (Email, Zoom, Google Meet, online payment systems, POS, inventory management software, digital marketing, accounting software, WhatsApp, Facebook Messenger)', 'points' => 1],
+                    ['text' => 'Digital devices (computers, smartphones, tablets Smartphone, Laptop/Desktop, Tablet, Point of Sale (POS) terminal, Barcode, QR, or RFID scanner)', 'points' => 1],
+                    ['text' => 'Digital Presence & Communication (website, online forms, blogs, live chats, social media, chatbots)', 'points' => 1],
+                    ['text' => 'Digital Commerce & Marketing (e-commerce sales, online ads, social media promotion)', 'points' => 1],
+                    ['text' => 'External Digital Interaction (e-government services, online public procurement)', 'points' => 1],
+                    ['text' => 'Internal Collaboration & Management (teleworking platforms, videoconferencing, intranet, ERP/CRM/SCM systems)', 'points' => 1],
+                ],
+            ],
+
+        ],
+
+        // category 3
+        'Digitalization of Business Processes & People & Skills' => [
+            [
+                'id' => 'category_3_q1',
+                'type' => 'checkbox',
+                'question' => 'What business functions have been digitized? ',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Inventory Management', 'points' => 1],
+                    ['text' => 'Human Resources/Payroll', 'points' => 1],
+                    ['text' => 'Customer Relationship Management (CRM)', 'points' => 1],
+                    ['text' => 'Supply Chain & Logistics', 'points' => 1],
+                    ['text' => 'Digital Banking & Transactions', 'points' => 1],
+                    ['text' => 'None of the above', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_3_q2',
+                'type' => 'checkbox',
+                'question' => 'How does your business store information?',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Physical archives (paper records)', 'points' => 1],
+                    ['text' => 'Local storage (hard drives, USBs, etc.)', 'points' => 1],
+                    ['text' => 'Cloud storage', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_3_q3',
+                'type' => 'checkbox',
+                'question' => 'How digitalized are your team members and processes?',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'My business use digital platforms for supplier and Customer interactions', 'points' => 1],
+                    ['text' => 'My business collect and analyze customer or operational data', 'points' => 1],
+                    ['text' => 'My business allow employees to work remotely', 'points' => 1],
+                    ['text' => 'Employees receive training on using essential digital tools.', 'points' => 1],
+                    ['text' => 'My team is comfortable using smartphones, computers, and business software.', 'points' => 1],
+                    ['text' => 'We have a designated person (or team) responsible for managing our digital channels and technology.', 'points' => 1],
+                    ['text' => 'Staff are encouraged to share ideas for digital improvements.', 'points' => 1],
+                    ['text' => 'Employees can often troubleshoot basic digital issues on their own.', 'points' => 1],
+                    ['text' => 'We provide informal learning opportunities (online tutorials, workshops) to enhance staff digital skills.', 'points' => 1],
+
+                ],
+            ],
+        ],
+
+        // category 4
+        'Digital Presence & Data Management' => [
+            [
+                'id' => 'category_4_q1',
+                'type' => 'checkbox',
+                'question' => 'Which platforms does your business use?',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Website', 'points' => 1],
+                    ['text' => 'Social media (Facebook, Instagram, X, LinkedIn)', 'points' => 1],
+                    ['text' => 'Messaging App (WhatsApp, Messenger, Email)', 'points' => 1],
+                    ['text' => 'Advance Digital Platforms (CRMs, HRM, Industry process automation Software)', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_4_q2',
+                'type' => 'radio',
+                'question' => 'Who manages your digital presence?',
+                'instruction' => 'Select one.',
+                'options' => [
+                    ['text' => 'Internal staff', 'points' => 1],
+                    ['text' => 'External consultant', 'points' => 1],
+                    ['text' => 'Not managed', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_4_q3',
+                'type' => 'select',
+                'question' => 'Do you have a designated budget for digitalisation?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_4_q4',
+                'type' => 'checkbox',
+                'question' => 'What features does your website include? ',
+                'options' => [
+                    ['text' => 'Company information', 'points' => 1],
+                    ['text' => 'Contact details', 'points' => 1],
+                    ['text' => 'Online store', 'points' => 1],
+                    ['text' => 'Payment gateway', 'points' => 1],
+                    ['text' => 'Customer service', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_4_q5',
+                'type' => 'checkbox',
+                'question' => 'Data Management',
+                'options' => [
+                    ['text' => 'I am aware of Data Privacy Protection principles', 'points' => 1],
+                    ['text' => 'We collect customer data and use it to improve our service.', 'points' => 1],
+                    ['text' => 'Our business has basic systems in place to securely store and back up data.', 'points' => 1],
+                    ['text' => 'Data is used to make informed decisions.', 'points' => 1],
+                    ['text' => 'We ensure customer data privacy by following clear guidelines or policies.', 'points' => 1],
+                    ['text' => 'Our business uses simple data analytics to gauge performance.', 'points' => 1],
+                    ['text' => 'We regularly review and update our data storage practices.', 'points' => 1],
+                ],
+            ],
+        ],
+
+        // category 5
+        'Digital Transactions, Cybersecurity, Automation & Emerging Technologies' => [
+            [
+                'id' => 'category_5_q1',
+                'type' => 'checkbox',
+                'question' => 'How do customers purchase from your business? ',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Physical store', 'points' => 1],
+                    ['text' => 'Own website', 'points' => 1],
+                    ['text' => 'Third-party platforms (Jumia, Konga, etc.)', 'points' => 1],
+                    ['text' => 'Social media (Facebook, WhatsApp, etc.)', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_5_q2',
+                'type' => 'checkbox',
+                'question' => 'What payment methods do you accept?',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'Cash', 'points' => 1],
+                    ['text' => 'Bank transfers', 'points' => 1],
+                    ['text' => 'Debit/Credit cards', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_5_q3',
+                'type' => 'radio',
+                'question' => 'How important is cybersecurity for your business?',
+                'options' => [
+                    ['text' => 'Not important', 'points' => 0],
+                    ['text' => 'Important', 'points' => 2],
+                    ['text' => 'Very important', 'points' => 3],
+                ],
+            ],
+
+            [
+                'id' => 'category_5_q4',
+                'type' => 'checkbox',
+                'question' => 'What cybersecurity measures have you implemented?',
+                'instruction' => 'Select all that apply.?',
+                'options' => [
+                    ['text' => 'Regular software updates', 'points' => 1],
+                    ['text' => 'Antivirus software', 'points' => 1],
+                    ['text' => 'Data backups', 'points' => 1],
+                    ['text' => 'Two-step authentication', 'points' => 1],
+                    ['text' => 'Staff cybersecurity training', 'points' => 1],
+                    ['text' => 'None', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_5_q5',
+                'type' => 'checkbox',
+                'question' => 'Automation & Emerging Technologies',
+                'instruction' => 'Select all that apply.?',
+                'options' => [
+                    ['text' => 'We use automation (automated invoicing, SMS reminders, digital appointment scheduling).', 'points' => 1],
+                    ['text' => 'I am aware of simple AI or analytics tools that can help boost our efficiency (chatbots, basic data analytics).', 'points' => 1],
+                    ['text' => 'If affordable, I would consider adopting more automated solutions.', 'points' => 1],
+                ],
+            ],
+        ],
+
+        // category 6
+        'Green Digitalisation & Readiness for Digital Transformation' => [
+            [
+                'id' => 'category_6_q1',
+                'type' => 'checkbox',
+                'question' => 'Green Digitalisation',
+                'instruction' => 'Select all that apply.',
+                'options' => [
+                    ['text' => 'We use digital tools to reduce paper usage and minimize waste.', 'points' => 1],
+                    ['text' => 'Our business is interested in technologies that help reduce energy consumption.', 'points' => 1],
+                    ['text' => 'We consider environmental impact when choosing new digital tools and solutions.', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q2',
+                'type' => 'select',
+                'question' => 'Does your business have sufficient technological infrastructure?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q3',
+                'type' => 'select',
+                'question' => 'Are you interested in increasing your business’s level of digitalization?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q4',
+                'type' => 'radio',
+                'question' => 'What challenges limit your business’s digital transformation? ',
+                'options' => [
+                    ['text' => 'Lack of funds', 'points' => 0],
+                    ['text' => 'Lack of digital knowledge', 'points' => 1],
+                    ['text' => 'Resistance to change', 'points' => 1],
+                    ['text' => 'Security concerns', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q5',
+                'type' => 'select',
+                'question' => 'Does your business consider digital skills when hiring?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q6',
+                'type' => 'select',
+                'question' => 'How often does your business conduct digital training for staff?',
+                'options' => [
+                    ['text' => 'Never', 'points' => 1],
+                    ['text' => 'Annually', 'points' => 0],
+                    ['text' => 'More than once a year', 'points' => 0],
+                ],
+            ],
+        ],
+
+        // category 7
+        'Digitalisation Exposure/Knowledge' => [
+            [
+                'id' => 'category_6_q1',
+                'type' => 'checkbox',
+                'question' => 'Which of the following digital terminologies/technologies are you familiar with or already used by your enterprise?',
+                'instruction' => 'please choose all options that apply using the provided scale',
+                'options' => [
+                    ['text' => 'We use digital tools to reduce paper usage and minimize waste.', 'points' => 1],
+                    ['text' => 'Our business is interested in technologies that help reduce energy consumption.', 'points' => 1],
+                    ['text' => 'We consider environmental impact when choosing new digital tools and solutions.', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q2',
+                'type' => 'select',
+                'question' => 'Does your business have sufficient technological infrastructure?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q3',
+                'type' => 'select',
+                'question' => 'Are you interested in increasing your business’s level of digitalization?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q4',
+                'type' => 'radio',
+                'question' => 'What challenges limit your business’s digital transformation? ',
+                'options' => [
+                    ['text' => 'Lack of funds', 'points' => 0],
+                    ['text' => 'Lack of digital knowledge', 'points' => 1],
+                    ['text' => 'Resistance to change', 'points' => 1],
+                    ['text' => 'Security concerns', 'points' => 1],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q5',
+                'type' => 'select',
+                'question' => 'Does your business consider digital skills when hiring?',
+                'options' => [
+                    ['text' => 'Yes', 'points' => 1],
+                    ['text' => 'No', 'points' => 0],
+                ],
+            ],
+
+            [
+                'id' => 'category_6_q6',
+                'type' => 'select',
+                'question' => 'How often does your business conduct digital training for staff?',
+                'options' => [
+                    ['text' => 'Never', 'points' => 1],
+                    ['text' => 'Annually', 'points' => 0],
+                    ['text' => 'More than once a year', 'points' => 0],
+                ],
+            ],
+
+            // [
+            //     'id' => 'category_6_q7',
+            //     'type' => 'likert',
+            //     'question' => 'Rate your organization\'s cloud infrastructure adoption:',
+            //     'options' => [
+            //         ['text' => 'Very Low', 'points' => 0],
+            //         ['text' => 'Low', 'points' => 1],
+            //         ['text' => 'Moderate', 'points' => 2],
+            //         ['text' => 'High', 'points' => 3],
+            //         ['text' => 'Very High', 'points' => 4],
+            //     ],
+            // ],
+        ],
+    ];
+
+    public function mount()
+    {
+        foreach ($this->sections as $sectionName => $questions) {
+            foreach ($questions as $question) {
+                if ($question['type'] === 'checkbox') {
+                    $this->answers[$question['id']] = [];
+                } else {
+                    $this->answers[$question['id']] = '';
+                }
+            }
+        }
+    }
+
+    public function nextSection()
+    {
+        if ($this->currentSection < count($this->sections) - 1) {
+            $this->currentSection++;
+        } else {
+            $this->showResults = true;
+        }
+    }
+
+    public function previousSection()
+    {
+        if ($this->currentSection > 0) {
+            $this->currentSection--;
+        }
+    }
+
+    public function calculateSectionScore($sectionName)
+    {
+        $totalPoints = 0;
+        $maxPoints = 0;
+
+        foreach ($this->sections[$sectionName] as $question) {
+            if ($question['type'] === 'checkbox') {
+
+                $selectedOptions = is_array($this->answers[$question['id']]) ? $this->answers[$question['id']] : [];
+
+                foreach ($question['options'] as $option) {
+
+                    $maxPoints += $option['points'];
+                    if (in_array($option['text'], $selectedOptions)) {
+                        $totalPoints += $option['points'];
+                    }
+                }
+            } else {
+                foreach ($question['options'] as $option) {
+                    if ($this->answers[$question['id']] === $option['text']) {
+                        $totalPoints += $option['points'];
+                    }
+                }
+                $maxPoints += max(array_column($question['options'], 'points'));
+            }
+        }
+
+        return [
+            'score' => $totalPoints,
+            'max' => $maxPoints,
+            'percentage' => $maxPoints > 0 ? round(($totalPoints / $maxPoints) * 100) : 0
+        ];
+    }
+
+    public function getMaturityLevel($percentage)
+    {
+        if ($percentage >= 80) return 'Advanced';
+        if ($percentage >= 60) return 'Established';
+        if ($percentage >= 40) return 'Developing';
+        if ($percentage >= 20) return 'Basic';
+        return 'Initial';
+    }
+
+    public function calculateOverallScore($scores)
+    {
+        if (empty($scores)) {
+            return [
+                'percentage' => 0,
+                'level' => 'Initial'
+            ];
+        }
+
+        $totalPercentage = 0;
+        $sectionsCount = count($scores);
+
+        foreach ($scores as $score) {
+            $totalPercentage += $score['percentage'];
+        }
+
+        $averagePercentage = round($totalPercentage / $sectionsCount);
+
+        return [
+            'percentage' => $averagePercentage,
+            'level' => $this->getMaturityLevel($averagePercentage)
+        ];
+    }
+
+    public function render()
+    {
+        $sectionNames = array_keys($this->sections);
+        $currentSectionName = $sectionNames[$this->currentSection];
+
+        $scores = [];
+        $overallScore = null;
+
+        if ($this->showResults) {
+            foreach ($this->sections as $sectionName => $questions) {
+                $scores[$sectionName] = $this->calculateSectionScore($sectionName);
+            }
+            $overallScore = $this->calculateOverallScore($scores);
+
+        }
+
+        return view('livewire.digital-maturity-assessment', [
+            'sections' => $this->sections,
+            'currentSectionName' => $currentSectionName,
+            'scores' => $scores,
+            'overallScore' => $overallScore,
+        ]);
+    }
+
+}
