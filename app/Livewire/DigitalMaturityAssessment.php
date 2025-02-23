@@ -2,15 +2,132 @@
 
 namespace App\Livewire;
 
+use App\Models\AssessmentResponse;
 use Livewire\Component;
 
 use function Ramsey\Uuid\v1;
 
 class DigitalMaturityAssessment extends Component
 {
-    public $currentSection = 0;
+    public $currentSection = '';
     public $answers = [];
     public $showResults = false;
+
+    // Basic Information
+    public $basicInfo = [
+        'respondent_name' => '',
+        'business_name' => '',
+        'gender' => '',
+        'phone_number' => '',
+        'email' => '',
+        'state' => '',
+        'nationality' => '',
+        'business_sector' => '',
+        'employee_count' => '',
+        'role' => '',
+        'years_in_business' => '',
+        'digital_advisor' => '',
+        'has_disability' => false,
+        'consent_given' => false,
+        'multiple_states' => false,
+        'operating_states' => '',
+        'staff_size' => ''
+    ];
+
+    protected $rules = [
+        'basicInfo.respondent_name' => 'required',
+        'basicInfo.business_name' => 'required',
+        'basicInfo.gender' => 'required',
+        'basicInfo.phone_number' => 'required',
+        'basicInfo.email' => 'required|email',
+        'basicInfo.state' => 'required',
+        //      'basicInfo.nationality' => 'required',
+        'basicInfo.business_sector' => 'required',
+        'basicInfo.employee_count' => 'required|numeric',
+        'basicInfo.role' => 'required',
+        'basicInfo.years_in_business' => 'required|numeric',
+        'basicInfo.consent_given' => 'required|accepted',
+        'basicInfo.staff_size' => 'required'
+    ];
+
+    // Business sectors in Nigeria
+    public $businessSectors = [
+        'Agriculture',
+        'Manufacturing',
+        'Trading',
+        'Services',
+        'Health',
+        'Logistics',
+        'Technology',
+        'Education',
+        'Construction',
+        'Oil and Gas',
+        'Financial Services',
+        'Entertainment',
+        'Others'
+    ];
+
+    // Nigerian states
+    public $states = [
+        'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno',
+        'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT', 'Gombe', 'Imo',
+        'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa',
+        'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba',
+        'Yobe', 'Zamfara'
+    ];
+
+    public function saveAssessment()
+    {
+        if ($this->basicInfo['multiple_states'] && empty($this->basicInfo['operating_states'])) {
+            $this->addError('operating_states', 'Please list the operating states.');
+            return;
+        }
+
+        $scores = [];
+        foreach ($this->sections as $sectionName => $questions) {
+            $scores[$sectionName] = $this->calculateSectionScore($sectionName);
+        }
+        $overallScore = $this->calculateOverallScore($scores);
+
+        AssessmentResponse::create([
+            // Basic Information
+            'respondent_name' => $this->basicInfo['respondent_name'],
+            'business_name' => $this->basicInfo['business_name'],
+            'gender' => $this->basicInfo['gender'],
+            'phone_number' => $this->basicInfo['phone_number'],
+            'email' => $this->basicInfo['email'],
+            'state' => $this->basicInfo['state'],
+            'nationality' => $this->basicInfo['nationality'],
+            'business_sector' => $this->basicInfo['business_sector'],
+            'employee_count' => $this->basicInfo['employee_count'],
+            'role' => $this->basicInfo['role'],
+            'years_in_business' => $this->basicInfo['years_in_business'],
+            'digital_advisor' => $this->basicInfo['digital_advisor'],
+            'has_disability' => $this->basicInfo['has_disability'],
+            'consent_given' => $this->basicInfo['consent_given'],
+            'multiple_states' => $this->basicInfo['multiple_states'],
+            'operating_states' => $this->basicInfo['operating_states'],
+            'staff_size' => $this->basicInfo['staff_size'],
+
+            // Assessment Data
+            'assessment_answers' => $this->answers,
+            'section_scores' => $scores,
+            'overall_score' => $overallScore['percentage'],
+            'maturity_level' => $overallScore['level']
+        ]);
+    }
+
+    public function startAssessment()
+    {
+        $this->validate();
+
+        if (!$this->basicInfo['consent_given']) {
+            $this->addError('consent', 'You must give consent to proceed with the assessment.');
+            return;
+        }
+
+        $this->currentSection = 0;
+    }
 
     protected $sections = [
         // category 1
@@ -304,7 +421,7 @@ class DigitalMaturityAssessment extends Component
 
             [
                 'id' => 'category_6_q4',
-                'type' => 'select',
+                'type' => 'checkbox',
                 'question' => 'What challenges limit your business’s digital transformation? ',
                 'options' => [
                     ['text' => 'Lack of funds', 'points' => 1],
@@ -348,6 +465,7 @@ class DigitalMaturityAssessment extends Component
                 'options' => [
                     ['text' => 'Digitalisation, Innovation, Technology, Digital Transformation.', 'points' => 1],
                     ['text' => 'Virtual Reality, Augmented Reality, Artificial Intelligence, Robotics, Emerging Technology.', 'points' => 1],
+                    ['text' => 'Digital Media, Digital Marketing, Innovation, Customer Relationship Management, Human Resource Management Software.', 'points' => 1],
                     ['text' => 'Software As A Service, Platform As A Service.', 'points' => 1],
                     ['text' => 'Computer-Aided Design (CAD) & Manufacturing (CAM).', 'points' => 1],
                     ['text' => 'Manufacturing Execution Systems.', 'points' => 1],
@@ -379,6 +497,7 @@ class DigitalMaturityAssessment extends Component
         if ($this->currentSection < count($this->sections) - 1) {
             $this->currentSection++;
         } else {
+            $this->saveAssessment();
             $this->showResults = true;
         }
     }
@@ -461,7 +580,7 @@ class DigitalMaturityAssessment extends Component
     public function render()
     {
         $sectionNames = array_keys($this->sections);
-        $currentSectionName = $sectionNames[$this->currentSection];
+        $currentSectionName = $this->currentSection >= 0 ? $sectionNames[$this->currentSection] : 'Basic Information';
 
         $scores = [];
         $overallScore = null;
@@ -477,6 +596,7 @@ class DigitalMaturityAssessment extends Component
         return view('livewire.digital-maturity-assessment', [
             'sections' => $this->sections,
             'currentSectionName' => $currentSectionName,
+            'sectionNames' => $sectionNames,
             'scores' => $scores,
             'overallScore' => $overallScore,
         ]);
