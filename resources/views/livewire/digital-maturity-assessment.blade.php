@@ -117,34 +117,38 @@
             <!-- Overall Score Card with dynamic colors -->
             @php
                 $bgColor = match($overallScore['level']) {
-                    'Advanced' => 'bg-green-50 border-green-200',
-                    'Established' => 'bg-blue-50 border-blue-200',
-                    'Developing' => 'bg-yellow-50 border-yellow-200',
-                    'Basic' => 'bg-orange-50 border-orange-200',
+                    'Leader/Transformative' => 'bg-green-50 border-green-300',
+                    'Advanced/Strategic' => 'bg-green-50 border-green-200',
+                    'Competent/Defined' => 'bg-blue-50 border-blue-200',
+                    'Developing/Emerging' => 'bg-yellow-50 border-yellow-200',
+                    'Novice/Beginner' => 'bg-orange-50 border-orange-200',
                     default => 'bg-red-50 border-red-200'
                 };
 
                 $textColor = match($overallScore['level']) {
-                    'Advanced' => 'text-green-800',
-                    'Established' => 'text-blue-800',
-                    'Developing' => 'text-yellow-800',
-                    'Basic' => 'text-orange-800',
+                    'Leader/Transformative' => 'text-green-600',
+                    'Advanced/Strategic' => 'text-green-500',
+                    'Competent/Defined' => 'text-blue-800',
+                    'Developing/Emerging' => 'text-yellow-800',
+                    'Novice/Beginner' => 'text-orange-800',
                     default => 'text-red-800'
                 };
 
                 $progressColor = match($overallScore['level']) {
-                    'Advanced' => 'bg-green-600',
-                    'Established' => 'bg-blue-600',
-                    'Developing' => 'bg-yellow-500',
-                    'Basic' => 'bg-orange-500',
+                    'Leader/Transformative' => '<bg-green-6></bg-green-6>00',
+                    'Advanced/Strategic' => 'bg-green-500',
+                    'Competent/Defined' => 'bg-blue-600',
+                    'Developing/Emerging' => 'bg-yellow-500',
+                    'Novice/Beginner' => 'bg-orange-500',
                     default => 'bg-red-500'
                 };
 
                 $scoreColor = match($overallScore['level']) {
-                    'Advanced' => 'text-green-600',
-                    'Established' => 'text-blue-600',
-                    'Developing' => 'text-yellow-600',
-                    'Basic' => 'text-orange-600',
+                    'Leader/Transformative' => 'text-green-600',
+                    'Advanced/Strategic' => 'text-green-500',
+                    'Competent/Defined' => 'text-blue-600',
+                    'Developing/Emerging' => 'text-yellow-600',
+                    'Novice/Beginner' => 'text-orange-600',
                     default => 'text-red-600'
                 };
             @endphp
@@ -173,17 +177,19 @@
                     @php
                         $level = $this->getMaturityLevel($score['percentage']);
                         $sectionProgressColor = match($level) {
-                            'Advanced' => 'bg-green-500',
-                            'Established' => 'bg-blue-500',
-                            'Developing' => 'bg-yellow-500',
-                            'Basic' => 'bg-orange-500',
+                            'Leader/Transformative' => 'bg-green-600',
+                            'Advanced/Strategic' => 'bg-green-500',
+                            'Competent/Defined' => 'bg-blue-500',
+                            'Developing/Emerging' => 'bg-yellow-500',
+                            'Novice/Beginner' => 'bg-orange-500',
                             default => 'bg-red-500'
                         };
                         $sectionTextColor = match($level) {
-                            'Advanced' => 'text-green-500',
-                            'Established' => 'text-blue-500',
-                            'Developing' => 'text-yellow-500',
-                            'Basic' => 'text-orange-500',
+                            'Leader/Transformative' => 'text-green-600',
+                            'Advanced/Strategic' => 'text-green-500',
+                            'Competent/Defined' => 'text-blue-500',
+                            'Developing/Emerging' => 'text-yellow-500',
+                            'Novice/Beginner' => 'text-orange-500',
                             default => 'text-red-500'
                         };
                     @endphp

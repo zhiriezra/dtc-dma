@@ -16,31 +16,20 @@ class DigitalMaturityAssessment extends Component
         // category 1
         'Business Information & Digital Strategy' => [
             [
-                'id' => 'category_1_q1',
-                'type' => 'select',
-                'question' => 'Does your business operate in multiple states?',
-                'instruction' => '',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
 
                 'id' => 'category_1_q2',
                 'type' => 'checkbox',
                 'question' => 'In which of the following ways is your enterprise prepared for (more) digitalization? ',
                 'instruction' => 'select all that apply.',
                 'options' => [
-                    ['text' => 'My business has a clear digital plan (e.g., website, social media, mobile platforms).', 'points' => 1/2],
+                    ['text' => 'My business has a clear digital plan (e.g., website, social media, mobile platforms).', 'points' => 1],
                     ['text' => 'We regularly review our digital approach to stay competitive.', 'points' => 1],
-                    ['text' => 'Our digital strategy is aligned with our overall business goals.', 'points' => 2],
-                    ['text' => 'We set measurable goals for our digital initiatives.', 'points' => 3],
+                    ['text' => 'Our digital strategy is aligned with our overall business goals.', 'points' => 1],
+                    ['text' => 'We set measurable goals for our digital initiatives.', 'points' => 1],
                     ['text' => 'We actively use digital channels (social media, online ads) to promote our products/services.', 'points' => 1],
-                    ['text' => 'We monitor digital trends and competitor activities to update our digital strategy', 'points' => 4],
-                    ['text' => 'We have secured the necessary financial resources and IT infrastructure for digitalization.', 'points' => 4],
-                    ['text' => 'We regularly track customer feedback and performance data from online interactions.', 'points' => 4],
+                    ['text' => 'We monitor digital trends and competitor activities to update our digital strategy', 'points' => 1],
+                    ['text' => 'We have secured the necessary financial resources and IT infrastructure for digitalization.', 'points' => 1],
+                    ['text' => 'We regularly track customer feedback and performance data from online interactions.', 'points' => 1],
                 ],
             ],
 
@@ -72,6 +61,7 @@ class DigitalMaturityAssessment extends Component
                     ['text' => 'Tablet', 'points' => 1],
                     ['text' => 'Point of Sale (POS) terminal', 'points' => 1],
                     ['text' => 'Barcode, QR, or RFID scanner', 'points' => 1],
+                    ['text' => 'Other', 'points' => 1],
                 ],
             ],
 
@@ -107,7 +97,6 @@ class DigitalMaturityAssessment extends Component
                     ['text' => 'Customer Relationship Management (CRM)', 'points' => 1],
                     ['text' => 'Supply Chain & Logistics', 'points' => 1],
                     ['text' => 'Digital Banking & Transactions', 'points' => 1],
-                    ['text' => 'None of the above', 'points' => 0],
                 ],
             ],
 
@@ -117,7 +106,7 @@ class DigitalMaturityAssessment extends Component
                 'question' => 'How does your business store information?',
                 'instruction' => 'Select all that apply.',
                 'options' => [
-                    ['text' => 'Physical archives (paper records)', 'points' => 1],
+                    ['text' => 'Physical archives (paper records)', 'points' => 0],
                     ['text' => 'Local storage (hard drives, USBs, etc.)', 'points' => 1],
                     ['text' => 'Cloud storage', 'points' => 1],
                 ],
@@ -155,6 +144,7 @@ class DigitalMaturityAssessment extends Component
                     ['text' => 'Social media (Facebook, Instagram, X, LinkedIn)', 'points' => 1],
                     ['text' => 'Messaging App (WhatsApp, Messenger, Email)', 'points' => 1],
                     ['text' => 'Advance Digital Platforms (CRMs, HRM, Industry process automation Software)', 'points' => 1],
+                    ['text' => 'Other', 'points' => 1],
                 ],
             ],
 
@@ -164,8 +154,7 @@ class DigitalMaturityAssessment extends Component
                 'question' => 'Who manages your digital presence?',
                 'instruction' => 'Select one.',
                 'options' => [
-                    ['text' => 'Internal staff', 'points' => 1],
-                    ['text' => 'External consultant', 'points' => 1],
+                    ['text' => 'Internal staff/External consultant', 'points' => 1],
                     ['text' => 'Not managed', 'points' => 0],
                 ],
             ],
@@ -184,12 +173,14 @@ class DigitalMaturityAssessment extends Component
                 'id' => 'category_4_q4',
                 'type' => 'checkbox',
                 'question' => 'What features does your website include? ',
+                'instruction' => 'Select all that apply.',
                 'options' => [
                     ['text' => 'Company information', 'points' => 1],
                     ['text' => 'Contact details', 'points' => 1],
                     ['text' => 'Online store', 'points' => 1],
                     ['text' => 'Payment gateway', 'points' => 1],
                     ['text' => 'Customer service', 'points' => 1],
+                    ['text' => 'Other', 'points' => 1],
                 ],
             ],
 
@@ -197,6 +188,7 @@ class DigitalMaturityAssessment extends Component
                 'id' => 'category_4_q5',
                 'type' => 'checkbox',
                 'question' => 'Data Management',
+                'instruction' => 'Select all that apply.',
                 'options' => [
                     ['text' => 'I am aware of Data Privacy Protection principles', 'points' => 1],
                     ['text' => 'We collect customer data and use it to improve our service.', 'points' => 1],
@@ -230,9 +222,10 @@ class DigitalMaturityAssessment extends Component
                 'question' => 'What payment methods do you accept?',
                 'instruction' => 'Select all that apply.',
                 'options' => [
-                    ['text' => 'Cash', 'points' => 1],
+                    ['text' => 'Cash', 'points' => 0],
                     ['text' => 'Bank transfers', 'points' => 1],
-                    ['text' => 'Debit/Credit cards', 'points' => 0],
+                    ['text' => 'Debit/Credit cards', 'points' => 1],
+                    ['text' => 'Mobile payment platforms (Opay, Flutterwave, etc)', 'points' => 1],
                 ],
             ],
 
@@ -242,8 +235,8 @@ class DigitalMaturityAssessment extends Component
                 'question' => 'How important is cybersecurity for your business?',
                 'options' => [
                     ['text' => 'Not important', 'points' => 0],
-                    ['text' => 'Important', 'points' => 2],
-                    ['text' => 'Very important', 'points' => 3],
+                    ['text' => 'Important', 'points' => 1],
+                    ['text' => 'Very important', 'points' => 1],
                 ],
             ],
 
@@ -311,13 +304,15 @@ class DigitalMaturityAssessment extends Component
 
             [
                 'id' => 'category_6_q4',
-                'type' => 'radio',
+                'type' => 'select',
                 'question' => 'What challenges limit your business’s digital transformation? ',
                 'options' => [
-                    ['text' => 'Lack of funds', 'points' => 0],
+                    ['text' => 'Lack of funds', 'points' => 1],
                     ['text' => 'Lack of digital knowledge', 'points' => 1],
                     ['text' => 'Resistance to change', 'points' => 1],
                     ['text' => 'Security concerns', 'points' => 1],
+                    ['text' => 'Other', 'points' => 1],
+                    ['text' => 'I don\'t know', 'points' => 0],
                 ],
             ],
 
@@ -336,9 +331,9 @@ class DigitalMaturityAssessment extends Component
                 'type' => 'select',
                 'question' => 'How often does your business conduct digital training for staff?',
                 'options' => [
-                    ['text' => 'Never', 'points' => 1],
-                    ['text' => 'Annually', 'points' => 0],
-                    ['text' => 'More than once a year', 'points' => 0],
+                    ['text' => 'Never', 'points' => 0],
+                    ['text' => 'Annually', 'points' => 1],
+                    ['text' => 'More than once a year', 'points' => 1],
                 ],
             ],
         ],
@@ -346,82 +341,23 @@ class DigitalMaturityAssessment extends Component
         // category 7
         'Digitalisation Exposure/Knowledge' => [
             [
-                'id' => 'category_6_q1',
+                'id' => 'category_7_q1',
                 'type' => 'checkbox',
-                'question' => 'Which of the following digital terminologies/technologies are you familiar with or already used by your enterprise?',
-                'instruction' => 'please choose all options that apply using the provided scale',
+                'question' => 'Which of the following digital terminologies/technologies are you familiar with or already used by your enterprise? ',
+                'instruction' => 'Select all that apply',
                 'options' => [
-                    ['text' => 'We use digital tools to reduce paper usage and minimize waste.', 'points' => 1],
-                    ['text' => 'Our business is interested in technologies that help reduce energy consumption.', 'points' => 1],
-                    ['text' => 'We consider environmental impact when choosing new digital tools and solutions.', 'points' => 1],
+                    ['text' => 'Digitalisation, Innovation, Technology, Digital Transformation.', 'points' => 1],
+                    ['text' => 'Virtual Reality, Augmented Reality, Artificial Intelligence, Robotics, Emerging Technology.', 'points' => 1],
+                    ['text' => 'Software As A Service, Platform As A Service.', 'points' => 1],
+                    ['text' => 'Computer-Aided Design (CAD) & Manufacturing (CAM).', 'points' => 1],
+                    ['text' => 'Manufacturing Execution Systems.', 'points' => 1],
+                    ['text' => 'Internet of Things (IoT) And Industrial Internet of Things (I-IoT).', 'points' => 1],
+                    ['text' => 'Blockchain Technology.', 'points' => 1],
+                    ['text' => 'Cyber Security, Data Analytics, Software Engineering.', 'points' => 1],
+                    ['text' => 'Additive Manufacturing (E.G. 3D Printers).', 'points' => 1],
                 ],
             ],
 
-            [
-                'id' => 'category_6_q2',
-                'type' => 'select',
-                'question' => 'Does your business have sufficient technological infrastructure?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q3',
-                'type' => 'select',
-                'question' => 'Are you interested in increasing your business’s level of digitalization?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q4',
-                'type' => 'radio',
-                'question' => 'What challenges limit your business’s digital transformation? ',
-                'options' => [
-                    ['text' => 'Lack of funds', 'points' => 0],
-                    ['text' => 'Lack of digital knowledge', 'points' => 1],
-                    ['text' => 'Resistance to change', 'points' => 1],
-                    ['text' => 'Security concerns', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q5',
-                'type' => 'select',
-                'question' => 'Does your business consider digital skills when hiring?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q6',
-                'type' => 'select',
-                'question' => 'How often does your business conduct digital training for staff?',
-                'options' => [
-                    ['text' => 'Never', 'points' => 1],
-                    ['text' => 'Annually', 'points' => 0],
-                    ['text' => 'More than once a year', 'points' => 0],
-                ],
-            ],
-
-            // [
-            //     'id' => 'category_6_q7',
-            //     'type' => 'likert',
-            //     'question' => 'Rate your organization\'s cloud infrastructure adoption:',
-            //     'options' => [
-            //         ['text' => 'Very Low', 'points' => 0],
-            //         ['text' => 'Low', 'points' => 1],
-            //         ['text' => 'Moderate', 'points' => 2],
-            //         ['text' => 'High', 'points' => 3],
-            //         ['text' => 'Very High', 'points' => 4],
-            //     ],
-            // ],
         ],
     ];
 
@@ -490,11 +426,12 @@ class DigitalMaturityAssessment extends Component
 
     public function getMaturityLevel($percentage)
     {
-        if ($percentage >= 80) return 'Advanced';
-        if ($percentage >= 60) return 'Established';
-        if ($percentage >= 40) return 'Developing';
-        if ($percentage >= 20) return 'Basic';
-        return 'Initial';
+        if ($percentage >= 81 && $percentage <= 100) return 'Leader/Transformative';
+        if ($percentage >= 61 && $percentage <= 80) return 'Advanced/Strategic';
+        if ($percentage >= 41 && $percentage <= 60) return 'Competent/Defined';
+        if ($percentage >= 21 && $percentage <= 40) return 'Developing/Emerging';
+        if ($percentage >= 0 && $percentage <= 20) return 'Novice/Beginner';
+        return 'Novice/Beginner';
     }
 
     public function calculateOverallScore($scores)
@@ -502,7 +439,7 @@ class DigitalMaturityAssessment extends Component
         if (empty($scores)) {
             return [
                 'percentage' => 0,
-                'level' => 'Initial'
+                'level' => 'Novice/Beginner'
             ];
         }
 
