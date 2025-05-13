@@ -8,17 +8,20 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Mail\Mailables\Attachment;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class DigitalMaturityResults extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $categoryScores, $totalScore;
+    public $categoryScores, $totalScore, $respondentName;
 
-    public function __construct($categoryScores, $totalScore)
+    public function __construct($categoryScores, $totalScore, $respondentName)
     {
         $this->categoryScores = $categoryScores;
         $this->totalScore = $totalScore;
+        $this->respondentName = $respondentName;
     }
     /**
      * Get the message envelope.
@@ -26,7 +29,7 @@ class DigitalMaturityResults extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Digital Maturity Results',
+            subject: 'Your Digital Maturity Assessment Results',
         );
     }
 
@@ -36,7 +39,7 @@ class DigitalMaturityResults extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'emails.digital-maturity-results',
         );
     }
 
@@ -47,6 +50,18 @@ class DigitalMaturityResults extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $pdf = PDF::loadView('pdf.digital-maturity-results', [
+            'categoryScores' => $this->categoryScores,
+            'totalScore' => $this->totalScore,
+            'respondentName' => $this->respondentName
+        ]);
+
+        return [
+            Attachment::fromData(
+                fn () => $pdf->output(),
+                'digital-maturity-assessment-results.pdf'
+            )
+            ->withMime('application/pdf'),
+        ];
     }
 }

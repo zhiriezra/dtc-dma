@@ -15,4 +15,9 @@ class DashboardController extends Controller
     {
         return view('admin.manage-users');
     }
+
+    public function assessments()
+    {
+        return view('admin.assessments');
+    }
 }

@@ -12,15 +12,15 @@
       </h1>
       <p class="text-base sm:text-lg mb-8">Unlock your business potential with our cutting-edge assessment tool.<br>In just 15 minutes, discover where you stand and get a personilized roadmap to digital success.</p>
       <div class="flex flex-col sm:flex-row gap-4 mb-8 w-full">
-        <button class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition flex items-center gap-2 w-full sm:w-auto justify-center">Start Assessment <span>&rarr;</span></button>
+        <a href="{{ route('dma') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition flex items-center gap-2 w-full sm:w-auto justify-center">Start Assessment <span>&rarr;</span></a>
         <button class="border border-white text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition hover:bg-white hover:text-green-900 w-full sm:w-auto justify-center">Learn More</button>
       </div>
       <div class="flex items-center gap-3 mt-4">
         <!-- Avatars -->
         <div class="flex -space-x-2">
-          <img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-8 h-8 rounded-full border-2 border-white" />
-          <img src="https://randomuser.me/api/portraits/women/44.jpg" class="w-8 h-8 rounded-full border-2 border-white" />
-          <img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-8 h-8 rounded-full border-2 border-white" />
+          <img src="{{ asset('images/african-business-man-1.jpg') }}" class="w-8 h-8 rounded-full border-2 border-white" />
+          <img src="{{ asset('images/african-business-woman-1.jpg') }}" class="w-8 h-8 rounded-full border-2 border-white" />
+          <img src="{{ asset('images/african-business-man-2.jpg') }}" class="w-8 h-8 rounded-full border-2 border-white" />
         </div>
         <span class="text-white text-sm sm:text-base font-semibold ml-2">500+ businesses already assessed</span>
       </div>
@@ -173,10 +173,17 @@
     <p class="text-lg sm:text-2xl text-gray-100 text-center mb-8 md:mb-12 max-w-3xl">Take the first step towards digital transformation by understanding where you stand today.</p>
     <div class="flex flex-col md:flex-row gap-4 justify-center items-center w-full max-w-xl">
       <button class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition w-full md:w-auto">Start Your Assessment</button>
-      <input type="text" placeholder="" class="rounded-lg px-4 py-3 sm:px-6 sm:py-4 text-green-900 text-base sm:text-lg focus:outline-none w-full md:w-auto min-w-[120px] md:min-w-[220px]" />
     </div>
-</div>
+  </div>
 </section>
+
+<!-- EU Disclaimer Section -->
+<div class="flex items-center gap-4 mt-8 mb-4 px-4">
+  <img src="https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Europe.svg" alt="EU Logo" class="w-12 h-8 object-contain" />
+  <span class="text-[#205493] text-base">
+    This publication was co-funded by the European Union. Its contents are the sole responsibility of GIZ Nigeria and can in no way be taken to reflect the views of the European Union.
+  </span>
+</div>
 
 @endsection
 

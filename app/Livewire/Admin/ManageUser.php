@@ -18,13 +18,18 @@ class ManageUser extends Component
     public $is_active = true;
     public $editingUserId = null;
     public $search = '';
+    public $phone;
+    public $state;
+    public $email_verified_at;
 
     protected $rules = [
         'name' => 'required|min:3',
         'email' => 'required|email|unique:users,email',
         'password' => 'required|min:6',
         'role_id' => 'required|exists:roles,id',
-        'is_active' => 'boolean'
+        'is_active' => 'boolean',
+        'phone' => 'required|string|unique:users,phone|digits:11',
+        'state' => 'required|string|max:100'
     ];
 
     public function mount()
@@ -41,10 +46,12 @@ class ManageUser extends Component
             'email' => $this->email,
             'password' => bcrypt($this->password),
             'role_id' => $this->role_id,
-            'is_active' => $this->is_active
+            'is_active' => $this->is_active,
+            'phone' => $this->phone,
+            'state' => $this->state
         ]);
 
-        $this->reset(['name', 'email', 'password', 'is_active']);
+        $this->reset(['name', 'email', 'password', 'is_active', 'phone', 'state']);
         session()->flash('message', 'DSP account created successfully.');
     }
 
@@ -56,6 +63,8 @@ class ManageUser extends Component
         $this->email = $user->email;
         $this->role_id = $user->role_id;
         $this->is_active = $user->is_active;
+        $this->phone = $user->phone;
+        $this->state = $user->state;
     }
 
     public function updateUser()
@@ -64,7 +73,9 @@ class ManageUser extends Component
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users,email,' . $this->editingUserId,
             'role_id' => 'required|exists:roles,id',
-            'is_active' => 'boolean'
+            'is_active' => 'boolean',
+            'phone' => 'nullable|string|max:20',
+            'state' => 'nullable|string|max:100'
         ];
 
         if ($this->password) {
@@ -78,14 +89,16 @@ class ManageUser extends Component
             'name' => $this->name,
             'email' => $this->email,
             'role_id' => $this->role_id,
-            'is_active' => $this->is_active
+            'is_active' => $this->is_active,
+            'phone' => $this->phone,
+            'state' => $this->state
         ]);
 
         if ($this->password) {
             $user->update(['password' => bcrypt($this->password)]);
         }
 
-        $this->reset(['name', 'email', 'password', 'role_id', 'is_active', 'editingUserId']);
+        $this->reset(['name', 'email', 'password', 'role_id', 'is_active', 'editingUserId', 'phone', 'state']);
         session()->flash('message', 'DSP account updated successfully.');
     }
 

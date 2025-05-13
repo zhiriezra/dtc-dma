@@ -3,6 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon_io/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon_io/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon_io/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('favicon_io/site.webmanifest') }}">
+
     @vite('resources/css/app.css')
     @livewireStyles
   </head>
@@ -24,18 +30,16 @@
         </div>
         <!-- Desktop Nav -->
         <div class="hidden md:flex items-center gap-8">
-          <!-- <a href="#" class="text-green-900 font-medium hover:text-green-700">What is DMA</a>
-          <a href="#" class="text-green-900 font-medium hover:text-green-700">Components</a> -->
+          
           <a href="{{ route('login') }}" class="text-green-900 font-medium hover:text-green-700">Administrator</a>
-          <a href="#" class="ml-4 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition">Get Started</a>
+          <a href="{{ route('dma') }}" class="ml-4 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition">Take DMA</a>
         </div>
       </div>
       <!-- Mobile Nav -->
       <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200 px-4 pb-4">
-        <!-- <a href="#" class="block py-2 text-green-900 font-medium hover:text-green-700">What is DMA</a>
-        <a href="#" class="block py-2 text-green-900 font-medium hover:text-green-700">Components</a> -->
+  
         <a href="{{ route('login') }}" class="block py-2 text-green-900 font-medium hover:text-green-700">Administrator</a>
-        <a href="#" class="block py-2 mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition w-full text-center">Get Started</a>
+        <a href="#" class="block py-2 mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition w-full text-center">Take DMA</a>
       </div>
     </nav>
 

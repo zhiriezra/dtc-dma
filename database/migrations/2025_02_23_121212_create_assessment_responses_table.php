@@ -13,23 +13,32 @@ return new class extends Migration
     {
         Schema::create('assessment_responses', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
+            
+            // Personal Information
             $table->string('respondent_name');
-            $table->string('business_name');
             $table->string('gender');
-            $table->string('phone_number');
+            $table->string('phone_number_1');
+            $table->string('phone_number_2');
             $table->string('email');
             $table->string('state');
-            $table->string('nationality');
+
+            // Business Information
+            $table->string('business_name');
+            $table->string('business_phone_number');
+            $table->string('business_email');
+            $table->string('business_state');
+            $table->string('business_city');
             $table->string('business_sector');
-            $table->integer('employee_count');
-            $table->string('role');
+            $table->string('business_type');
+            $table->string('business_role');
             $table->integer('years_in_business');
-            $table->string('digital_advisor')->nullable();
-            $table->boolean('has_disability');
-            $table->boolean('consent_given');
-            $table->boolean('multiple_states');
-            $table->text('operating_states')->nullable();
             $table->string('staff_size');
+            $table->string('digital_advisor')->nullable();
+            $table->boolean('has_disability')->default(false);
+            $table->boolean('consent_given')->default(false);
+            $table->boolean('multiple_states')->default(false);
+            $table->text('operating_states')->nullable();
 
             // Assessment Responses
             $table->json('assessment_answers');

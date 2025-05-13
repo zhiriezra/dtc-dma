@@ -3,51 +3,106 @@
 namespace App\Livewire;
 
 use App\Models\AssessmentResponse;
+use App\Models\AssessmentQuestion;
+use App\Models\AssessmentSection;
 use Livewire\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Mail\DigitalMaturityResults;
+use Illuminate\Support\Facades\Mail;
 
 use function Ramsey\Uuid\v1;
 
 class DigitalMaturityAssessment extends Component
 {
-    public $currentSection = '';
+    public $currentSection = -1;
     public $answers = [];
     public $showResults = false;
+    public $digitalAdvisorName = '';
+    public $sections = [];
+    public $sectionNames = [];
+    public $isSaving = false;
 
-    // Basic Information
-    public $basicInfo = [
+    // Personal Information
+    public $personalInfo = [
         'respondent_name' => '',
-        'business_name' => '',
         'gender' => '',
-        'phone_number' => '',
+        'phone_number_1' => '',
+        'phone_number_2' => '',
         'email' => '',
         'state' => '',
-        'nationality' => '',
-        'business_sector' => '',
-        'employee_count' => '',
-        'role' => '',
-        'years_in_business' => '',
-        'digital_advisor' => '',
         'has_disability' => false,
+        'digital_advisor' => '',
         'consent_given' => false,
+    ];
+    
+    // Business Information
+    public $businessInfo = [
+        'business_name' => '',
+        'business_phone_number' => '',
+        'business_email' => '',
+        'business_state' => '',
+        'business_city' => '',
+        'business_sector' => '',
+        'business_type' => '',
+        'business_role' => '',
+        'years_in_business' => '',
+        'staff_size' => '',
         'multiple_states' => false,
         'operating_states' => '',
-        'staff_size' => ''
     ];
 
     protected $rules = [
-        'basicInfo.respondent_name' => 'required',
-        'basicInfo.business_name' => 'required',
-        'basicInfo.gender' => 'required',
-        'basicInfo.phone_number' => 'required',
-        'basicInfo.email' => 'required|email',
-        'basicInfo.state' => 'required',
-        //      'basicInfo.nationality' => 'required',
-        'basicInfo.business_sector' => 'required',
-        'basicInfo.employee_count' => 'required|numeric',
-        'basicInfo.role' => 'required',
-        'basicInfo.years_in_business' => 'required|numeric',
-        'basicInfo.consent_given' => 'required|accepted',
-        'basicInfo.staff_size' => 'required'
+        // Personal Information Validation
+        'personalInfo.respondent_name' => 'required',
+        'personalInfo.gender' => 'required',
+        'personalInfo.phone_number_1' => 'required',
+        'personalInfo.phone_number_2' => 'required',
+        'personalInfo.email' => 'required|email',
+        'personalInfo.state' => 'required',
+        'personalInfo.has_disability' => 'boolean',
+        'personalInfo.consent_given' => 'required|accepted',
+
+        // Business Information Validation
+        'businessInfo.business_name' => 'required',
+        'businessInfo.business_phone_number' => 'required',
+        'businessInfo.business_email' => 'required|email',
+        'businessInfo.business_state' => 'required',
+        'businessInfo.business_city' => 'required',
+        'businessInfo.business_sector' => 'required',
+        'businessInfo.business_type' => 'required',
+        'businessInfo.business_role' => 'required',
+        'businessInfo.years_in_business' => 'required|numeric',
+        'businessInfo.staff_size' => 'required',
+        'businessInfo.multiple_states' => 'boolean',
+        'businessInfo.operating_states' => 'required_if:businessInfo.multiple_states,true',
+    ];
+
+    protected $messages = [
+        // Personal Information Messages
+        'personalInfo.respondent_name.required' => 'Please enter your name',
+        'personalInfo.gender.required' => 'Please select your gender',
+        'personalInfo.phone_number_1.required' => 'Please enter your primary phone number',
+        'personalInfo.phone_number_2.required' => 'Please enter your secondary phone number',
+        'personalInfo.email.required' => 'Please enter your email address',
+        'personalInfo.email.email' => 'Please enter a valid email address',
+        'personalInfo.state.required' => 'Please select your state',
+        'personalInfo.consent_given.required' => 'You must give consent to proceed',
+        'personalInfo.consent_given.accepted' => 'You must give consent to proceed',
+
+        // Business Information Messages
+        'businessInfo.business_name.required' => 'Please enter your business name',
+        'businessInfo.business_phone_number.required' => 'Please enter your business phone number',
+        'businessInfo.business_email.required' => 'Please enter your business email address',
+        'businessInfo.business_email.email' => 'Please enter a valid business email address',
+        'businessInfo.business_state.required' => 'Please select your business state',
+        'businessInfo.business_city.required' => 'Please enter your business city',
+        'businessInfo.business_sector.required' => 'Please select your business sector',
+        'businessInfo.business_type.required' => 'Please select your business type',
+        'businessInfo.business_role.required' => 'Please select your role in the business',
+        'businessInfo.years_in_business.required' => 'Please enter how many years you have been in business',
+        'businessInfo.years_in_business.numeric' => 'Years in business must be a number',
+        'businessInfo.staff_size.required' => 'Please select your staff size',
+        'businessInfo.operating_states.required_if' => 'Please list the states where you operate',
     ];
 
     // Business sectors in Nigeria
@@ -76,425 +131,148 @@ class DigitalMaturityAssessment extends Component
         'Yobe', 'Zamfara'
     ];
 
+    protected $sectionWeights = [
+        'Internet Access, Technology Use and Digital Readiness' => 0.15,        // 15%
+        'Digitalisation of Business Processes, People and Skills' => 0.20,      // 20%
+        'Digital Presence & Data Management' => 0.20,                          // 20%
+        'Digital Transactions, Cybersecurity, Automation & Emerging Technologies' => 0.20,  // 20%
+        'Green Digitalisation & Readiness for Digital Transformation' => 0.15,  // 15%
+        'Validation Section' => 0.10                                           // 10%
+    ];
+
+    protected $sectionScalingFactors = [
+        'Internet Access, Technology Use and Digital Readiness' => 3.0,        // 5 points → 15 points
+        'Digitalisation of Business Processes, People and Skills' => 1.82,     // 11 points → 20 points
+        'Digital Presence & Data Management' => 1.25,                         // 16 points → 20 points
+        'Digital Transactions, Cybersecurity, Automation & Emerging Technologies' => 1.43,  // 14 points → 20 points
+        'Green Digitalisation & Readiness for Digital Transformation' => 1.25, // 8 points → 10 points
+        'Validation Section' => 0.6                                           // 25 points → 15 points
+    ];
+
+    public function mount()
+    {
+        // Set digital advisor if user is logged in
+        if (Auth::check()) {
+            $this->personalInfo['digital_advisor'] = Auth::id();
+            $this->digitalAdvisorName = Auth::user()->name;
+        }
+
+        // Load sections and questions from database
+        $sections = AssessmentSection::ordered()->with(['questions' => function($query) {
+            $query->ordered();
+        }])->get();
+        
+        // Group questions by section
+        foreach ($sections as $section) {
+            $this->sections[$section->name] = [
+                'description' => $section->description,
+                'weight' => $section->weight,
+                'scaling_factor' => $section->scaling_factor,
+                'questions' => $section->questions->map(function($question) {
+                    return [
+                        'id' => 'question_' . $question->id,
+                        'type' => $question->type,
+                        'question' => $question->question,
+                        'instruction' => $question->instruction,
+                        'options' => $question->options,
+                    ];
+                })->toArray()
+            ];
+
+            // Initialize answers array for each question
+            foreach ($section->questions as $question) {
+                if ($question->type === 'checkbox') {
+                    $this->answers['question_' . $question->id] = [];
+                } else {
+                    $this->answers['question_' . $question->id] = '';
+                }
+            }
+        }
+
+        // Get unique section names
+        $this->sectionNames = array_keys($this->sections);
+    }
+
     public function saveAssessment()
     {
-        if ($this->basicInfo['multiple_states'] && empty($this->basicInfo['operating_states'])) {
-            $this->addError('operating_states', 'Please list the operating states.');
+        if ($this->businessInfo['multiple_states'] && empty($this->businessInfo['operating_states'])) {
+            $this->addError('businessInfo.operating_states', 'Please list the operating states.');
             return;
         }
 
-        $scores = [];
-        foreach ($this->sections as $sectionName => $questions) {
-            $scores[$sectionName] = $this->calculateSectionScore($sectionName);
+        try {
+            $this->isSaving = true;
+
+            $scores = [];
+            foreach ($this->sectionNames as $sectionName) {
+                $scores[$sectionName] = $this->calculateSectionScore($sectionName);
+            }
+            $overallScore = $this->calculateOverallScore($scores);
+
+            AssessmentResponse::create([
+                // Personal Information
+                'respondent_name' => $this->personalInfo['respondent_name'],
+                'gender' => $this->personalInfo['gender'],
+                'phone_number_1' => $this->personalInfo['phone_number_1'],
+                'phone_number_2' => $this->personalInfo['phone_number_2'],
+                'email' => $this->personalInfo['email'],
+                'state' => $this->personalInfo['state'],
+                'has_disability' => $this->personalInfo['has_disability'],
+                'user_id' => Auth::id(),
+                'consent_given' => $this->personalInfo['consent_given'],
+
+                // Business Information
+                'business_name' => $this->businessInfo['business_name'],
+                'business_phone_number' => $this->businessInfo['business_phone_number'],
+                'business_email' => $this->businessInfo['business_email'],
+                'business_state' => $this->businessInfo['business_state'],
+                'business_city' => $this->businessInfo['business_city'],
+                'business_sector' => $this->businessInfo['business_sector'],
+                'business_type' => $this->businessInfo['business_type'],
+                'business_role' => $this->businessInfo['business_role'],
+                'years_in_business' => $this->businessInfo['years_in_business'],
+                'staff_size' => $this->businessInfo['staff_size'],
+                'multiple_states' => $this->businessInfo['multiple_states'],
+                'operating_states' => $this->businessInfo['operating_states'],
+
+                // Assessment Data
+                'assessment_answers' => $this->answers,
+                'section_scores' => $scores,
+                'overall_score' => $overallScore['percentage'],
+                'maturity_level' => $overallScore['level']
+            ]);
+
+            // Send email with results
+            Mail::to($this->personalInfo['email'])
+                ->send(new DigitalMaturityResults(
+                    $scores,
+                    $overallScore,
+                    $this->personalInfo['respondent_name']
+                ));
+
+            $this->showResults = true;
+        } catch (\Exception $e) {
+            $this->addError('save', 'An error occurred while saving your assessment. Please try again.');
+        } finally {
+            $this->isSaving = false;
         }
-        $overallScore = $this->calculateOverallScore($scores);
-
-        AssessmentResponse::create([
-            // Basic Information
-            'respondent_name' => $this->basicInfo['respondent_name'],
-            'business_name' => $this->basicInfo['business_name'],
-            'gender' => $this->basicInfo['gender'],
-            'phone_number' => $this->basicInfo['phone_number'],
-            'email' => $this->basicInfo['email'],
-            'state' => $this->basicInfo['state'],
-            'nationality' => $this->basicInfo['nationality'],
-            'business_sector' => $this->basicInfo['business_sector'],
-            'employee_count' => $this->basicInfo['employee_count'],
-            'role' => $this->basicInfo['role'],
-            'years_in_business' => $this->basicInfo['years_in_business'],
-            'digital_advisor' => $this->basicInfo['digital_advisor'],
-            'has_disability' => $this->basicInfo['has_disability'],
-            'consent_given' => $this->basicInfo['consent_given'],
-            'multiple_states' => $this->basicInfo['multiple_states'],
-            'operating_states' => $this->basicInfo['operating_states'],
-            'staff_size' => $this->basicInfo['staff_size'],
-
-            // Assessment Data
-            'assessment_answers' => $this->answers,
-            'section_scores' => $scores,
-            'overall_score' => $overallScore['percentage'],
-            'maturity_level' => $overallScore['level']
-        ]);
     }
 
     public function startAssessment()
     {
         $this->validate();
 
-        if (!$this->basicInfo['consent_given']) {
-            $this->addError('consent', 'You must give consent to proceed with the assessment.');
+        if (!$this->personalInfo['consent_given']) {
+            $this->addError('personalInfo.consent_given', 'You must give consent to proceed with the assessment.');
             return;
         }
 
         $this->currentSection = 0;
     }
 
-    protected $sections = [
-        // category 1
-        'Business Information & Digital Strategy' => [
-            [
-
-                'id' => 'category_1_q2',
-                'type' => 'checkbox',
-                'question' => 'In which of the following ways is your enterprise prepared for (more) digitalization? ',
-                'instruction' => 'select all that apply.',
-                'options' => [
-                    ['text' => 'My business has a clear digital plan (e.g., website, social media, mobile platforms).', 'points' => 1],
-                    ['text' => 'We regularly review our digital approach to stay competitive.', 'points' => 1],
-                    ['text' => 'Our digital strategy is aligned with our overall business goals.', 'points' => 1],
-                    ['text' => 'We set measurable goals for our digital initiatives.', 'points' => 1],
-                    ['text' => 'We actively use digital channels (social media, online ads) to promote our products/services.', 'points' => 1],
-                    ['text' => 'We monitor digital trends and competitor activities to update our digital strategy', 'points' => 1],
-                    ['text' => 'We have secured the necessary financial resources and IT infrastructure for digitalization.', 'points' => 1],
-                    ['text' => 'We regularly track customer feedback and performance data from online interactions.', 'points' => 1],
-                ],
-            ],
-
-        ],
-
-        // category 2
-        'Internet Access, Technology Use & Digital Readiness' => [
-            [
-
-                'id' => 'category_2_q1',
-                'type' => 'select',
-                'question' => 'Does your business have an active internet connection?',
-                'instruction' => '',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-
-                'id' => 'category_2_q2',
-                'type' => 'checkbox',
-                'question' => 'Which of the following devices are used in your business? ',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Smartphone', 'points' => 1],
-                    ['text' => 'Laptop/Desktop', 'points' => 1],
-                    ['text' => 'Tablet', 'points' => 1],
-                    ['text' => 'Point of Sale (POS) terminal', 'points' => 1],
-                    ['text' => 'Barcode, QR, or RFID scanner', 'points' => 1],
-                    ['text' => 'Other', 'points' => 1],
-                ],
-            ],
-
-            [
-
-                'id' => 'category_2_q3',
-                'type' => 'checkbox',
-                'question' => 'Which of the following digital technologies and solutions are already used by your enterprise? (Select all that apply) ',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Connectivity & Cloud Services (e.g., Google Drive, OneDrive, high-speed fiber internet, cloud computing, remote office access)', 'points' => 1],
-                    ['text' => 'Digital tools (Email, Zoom, Google Meet, online payment systems, POS, inventory management software, digital marketing, accounting software, WhatsApp, Facebook Messenger)', 'points' => 1],
-                    ['text' => 'Digital devices (computers, smartphones, tablets Smartphone, Laptop/Desktop, Tablet, Point of Sale (POS) terminal, Barcode, QR, or RFID scanner)', 'points' => 1],
-                    ['text' => 'Digital Presence & Communication (website, online forms, blogs, live chats, social media, chatbots)', 'points' => 1],
-                    ['text' => 'Digital Commerce & Marketing (e-commerce sales, online ads, social media promotion)', 'points' => 1],
-                    ['text' => 'External Digital Interaction (e-government services, online public procurement)', 'points' => 1],
-                    ['text' => 'Internal Collaboration & Management (teleworking platforms, videoconferencing, intranet, ERP/CRM/SCM systems)', 'points' => 1],
-                ],
-            ],
-
-        ],
-
-        // category 3
-        'Digitalization of Business Processes & People & Skills' => [
-            [
-                'id' => 'category_3_q1',
-                'type' => 'checkbox',
-                'question' => 'What business functions have been digitized? ',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Inventory Management', 'points' => 1],
-                    ['text' => 'Human Resources/Payroll', 'points' => 1],
-                    ['text' => 'Customer Relationship Management (CRM)', 'points' => 1],
-                    ['text' => 'Supply Chain & Logistics', 'points' => 1],
-                    ['text' => 'Digital Banking & Transactions', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_3_q2',
-                'type' => 'checkbox',
-                'question' => 'How does your business store information?',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Physical archives (paper records)', 'points' => 0],
-                    ['text' => 'Local storage (hard drives, USBs, etc.)', 'points' => 1],
-                    ['text' => 'Cloud storage', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_3_q3',
-                'type' => 'checkbox',
-                'question' => 'How digitalized are your team members and processes?',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'My business use digital platforms for supplier and Customer interactions', 'points' => 1],
-                    ['text' => 'My business collect and analyze customer or operational data', 'points' => 1],
-                    ['text' => 'My business allow employees to work remotely', 'points' => 1],
-                    ['text' => 'Employees receive training on using essential digital tools.', 'points' => 1],
-                    ['text' => 'My team is comfortable using smartphones, computers, and business software.', 'points' => 1],
-                    ['text' => 'We have a designated person (or team) responsible for managing our digital channels and technology.', 'points' => 1],
-                    ['text' => 'Staff are encouraged to share ideas for digital improvements.', 'points' => 1],
-                    ['text' => 'Employees can often troubleshoot basic digital issues on their own.', 'points' => 1],
-                    ['text' => 'We provide informal learning opportunities (online tutorials, workshops) to enhance staff digital skills.', 'points' => 1],
-
-                ],
-            ],
-        ],
-
-        // category 4
-        'Digital Presence & Data Management' => [
-            [
-                'id' => 'category_4_q1',
-                'type' => 'checkbox',
-                'question' => 'Which platforms does your business use?',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Website', 'points' => 1],
-                    ['text' => 'Social media (Facebook, Instagram, X, LinkedIn)', 'points' => 1],
-                    ['text' => 'Messaging App (WhatsApp, Messenger, Email)', 'points' => 1],
-                    ['text' => 'Advance Digital Platforms (CRMs, HRM, Industry process automation Software)', 'points' => 1],
-                    ['text' => 'Other', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_4_q2',
-                'type' => 'radio',
-                'question' => 'Who manages your digital presence?',
-                'instruction' => 'Select one.',
-                'options' => [
-                    ['text' => 'Internal staff/External consultant', 'points' => 1],
-                    ['text' => 'Not managed', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_4_q3',
-                'type' => 'select',
-                'question' => 'Do you have a designated budget for digitalisation?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_4_q4',
-                'type' => 'checkbox',
-                'question' => 'What features does your website include? ',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Company information', 'points' => 1],
-                    ['text' => 'Contact details', 'points' => 1],
-                    ['text' => 'Online store', 'points' => 1],
-                    ['text' => 'Payment gateway', 'points' => 1],
-                    ['text' => 'Customer service', 'points' => 1],
-                    ['text' => 'Other', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_4_q5',
-                'type' => 'checkbox',
-                'question' => 'Data Management',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'I am aware of Data Privacy Protection principles', 'points' => 1],
-                    ['text' => 'We collect customer data and use it to improve our service.', 'points' => 1],
-                    ['text' => 'Our business has basic systems in place to securely store and back up data.', 'points' => 1],
-                    ['text' => 'Data is used to make informed decisions.', 'points' => 1],
-                    ['text' => 'We ensure customer data privacy by following clear guidelines or policies.', 'points' => 1],
-                    ['text' => 'Our business uses simple data analytics to gauge performance.', 'points' => 1],
-                    ['text' => 'We regularly review and update our data storage practices.', 'points' => 1],
-                ],
-            ],
-        ],
-
-        // category 5
-        'Digital Transactions, Cybersecurity, Automation & Emerging Technologies' => [
-            [
-                'id' => 'category_5_q1',
-                'type' => 'checkbox',
-                'question' => 'How do customers purchase from your business? ',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Physical store', 'points' => 1],
-                    ['text' => 'Own website', 'points' => 1],
-                    ['text' => 'Third-party platforms (Jumia, Konga, etc.)', 'points' => 1],
-                    ['text' => 'Social media (Facebook, WhatsApp, etc.)', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_5_q2',
-                'type' => 'checkbox',
-                'question' => 'What payment methods do you accept?',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'Cash', 'points' => 0],
-                    ['text' => 'Bank transfers', 'points' => 1],
-                    ['text' => 'Debit/Credit cards', 'points' => 1],
-                    ['text' => 'Mobile payment platforms (Opay, Flutterwave, etc)', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_5_q3',
-                'type' => 'radio',
-                'question' => 'How important is cybersecurity for your business?',
-                'options' => [
-                    ['text' => 'Not important', 'points' => 0],
-                    ['text' => 'Important', 'points' => 1],
-                    ['text' => 'Very important', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_5_q4',
-                'type' => 'checkbox',
-                'question' => 'What cybersecurity measures have you implemented?',
-                'instruction' => 'Select all that apply.?',
-                'options' => [
-                    ['text' => 'Regular software updates', 'points' => 1],
-                    ['text' => 'Antivirus software', 'points' => 1],
-                    ['text' => 'Data backups', 'points' => 1],
-                    ['text' => 'Two-step authentication', 'points' => 1],
-                    ['text' => 'Staff cybersecurity training', 'points' => 1],
-                    ['text' => 'None', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_5_q5',
-                'type' => 'checkbox',
-                'question' => 'Automation & Emerging Technologies',
-                'instruction' => 'Select all that apply.?',
-                'options' => [
-                    ['text' => 'We use automation (automated invoicing, SMS reminders, digital appointment scheduling).', 'points' => 1],
-                    ['text' => 'I am aware of simple AI or analytics tools that can help boost our efficiency (chatbots, basic data analytics).', 'points' => 1],
-                    ['text' => 'If affordable, I would consider adopting more automated solutions.', 'points' => 1],
-                ],
-            ],
-        ],
-
-        // category 6
-        'Green Digitalisation & Readiness for Digital Transformation' => [
-            [
-                'id' => 'category_6_q1',
-                'type' => 'checkbox',
-                'question' => 'Green Digitalisation',
-                'instruction' => 'Select all that apply.',
-                'options' => [
-                    ['text' => 'We use digital tools to reduce paper usage and minimize waste.', 'points' => 1],
-                    ['text' => 'Our business is interested in technologies that help reduce energy consumption.', 'points' => 1],
-                    ['text' => 'We consider environmental impact when choosing new digital tools and solutions.', 'points' => 1],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q2',
-                'type' => 'select',
-                'question' => 'Does your business have sufficient technological infrastructure?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q3',
-                'type' => 'select',
-                'question' => 'Are you interested in increasing your business’s level of digitalization?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q4',
-                'type' => 'checkbox',
-                'question' => 'What challenges limit your business’s digital transformation? ',
-                'options' => [
-                    ['text' => 'Lack of funds', 'points' => 1],
-                    ['text' => 'Lack of digital knowledge', 'points' => 1],
-                    ['text' => 'Resistance to change', 'points' => 1],
-                    ['text' => 'Security concerns', 'points' => 1],
-                    ['text' => 'Other', 'points' => 1],
-                    ['text' => 'I don\'t know', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q5',
-                'type' => 'select',
-                'question' => 'Does your business consider digital skills when hiring?',
-                'options' => [
-                    ['text' => 'Yes', 'points' => 1],
-                    ['text' => 'No', 'points' => 0],
-                ],
-            ],
-
-            [
-                'id' => 'category_6_q6',
-                'type' => 'select',
-                'question' => 'How often does your business conduct digital training for staff?',
-                'options' => [
-                    ['text' => 'Never', 'points' => 0],
-                    ['text' => 'Annually', 'points' => 1],
-                    ['text' => 'More than once a year', 'points' => 1],
-                ],
-            ],
-        ],
-
-        // category 7
-        'Digitalisation Exposure/Knowledge' => [
-            [
-                'id' => 'category_7_q1',
-                'type' => 'checkbox',
-                'question' => 'Which of the following digital terminologies/technologies are you familiar with or already used by your enterprise? ',
-                'instruction' => 'Select all that apply',
-                'options' => [
-                    ['text' => 'Digitalisation, Innovation, Technology, Digital Transformation.', 'points' => 1],
-                    ['text' => 'Virtual Reality, Augmented Reality, Artificial Intelligence, Robotics, Emerging Technology.', 'points' => 1],
-                    ['text' => 'Digital Media, Digital Marketing, Innovation, Customer Relationship Management, Human Resource Management Software.', 'points' => 1],
-                    ['text' => 'Software As A Service, Platform As A Service.', 'points' => 1],
-                    ['text' => 'Computer-Aided Design (CAD) & Manufacturing (CAM).', 'points' => 1],
-                    ['text' => 'Manufacturing Execution Systems.', 'points' => 1],
-                    ['text' => 'Internet of Things (IoT) And Industrial Internet of Things (I-IoT).', 'points' => 1],
-                    ['text' => 'Blockchain Technology.', 'points' => 1],
-                    ['text' => 'Cyber Security, Data Analytics, Software Engineering.', 'points' => 1],
-                    ['text' => 'Additive Manufacturing (E.G. 3D Printers).', 'points' => 1],
-                ],
-            ],
-
-        ],
-    ];
-
-    public function mount()
-    {
-        foreach ($this->sections as $sectionName => $questions) {
-            foreach ($questions as $question) {
-                if ($question['type'] === 'checkbox') {
-                    $this->answers[$question['id']] = [];
-                } else {
-                    $this->answers[$question['id']] = '';
-                }
-            }
-        }
-    }
-
     public function nextSection()
     {
-        if ($this->currentSection < count($this->sections) - 1) {
+        if ($this->currentSection < count($this->sectionNames) - 1) {
             $this->currentSection++;
         } else {
             $this->saveAssessment();
@@ -513,14 +291,13 @@ class DigitalMaturityAssessment extends Component
     {
         $totalPoints = 0;
         $maxPoints = 0;
+        $section = $this->sections[$sectionName];
 
-        foreach ($this->sections[$sectionName] as $question) {
+        foreach ($section['questions'] as $question) {
             if ($question['type'] === 'checkbox') {
-
                 $selectedOptions = is_array($this->answers[$question['id']]) ? $this->answers[$question['id']] : [];
 
                 foreach ($question['options'] as $option) {
-
                     $maxPoints += $option['points'];
                     if (in_array($option['text'], $selectedOptions)) {
                         $totalPoints += $option['points'];
@@ -536,10 +313,41 @@ class DigitalMaturityAssessment extends Component
             }
         }
 
+        // Calculate original percentage
+        $originalPercentage = $maxPoints > 0 ? round(($totalPoints / $maxPoints) * 100) : 0;
+
+        // Apply scaling factor for overall score contribution
+        $scalingFactor = $section['scaling_factor'];
+        $scaledMaxPoints = $maxPoints * $scalingFactor;
+        $scaledTotalPoints = $totalPoints * $scalingFactor;
+        $scaledPercentage = $scaledMaxPoints > 0 ? round(($scaledTotalPoints / $scaledMaxPoints) * 100) : 0;
+
         return [
-            'score' => $totalPoints,
-            'max' => $maxPoints,
-            'percentage' => $maxPoints > 0 ? round(($totalPoints / $maxPoints) * 100) : 0
+            'score' => $totalPoints,                    // Original points
+            'max' => $maxPoints,                        // Original max points
+            'percentage' => $originalPercentage,        // Original percentage
+            'scaled_score' => $scaledTotalPoints,       // Scaled points
+            'scaled_max' => $scaledMaxPoints,          // Scaled max points
+            'scaled_percentage' => $scaledPercentage    // Scaled percentage
+        ];
+    }
+
+    public function calculateOverallScore($scores)
+    {
+        $totalWeightedScore = 0;
+        $totalWeight = 0;
+
+        foreach ($scores as $sectionName => $score) {
+            $weight = $this->sections[$sectionName]['weight'];
+            $totalWeightedScore += $score['scaled_percentage'] * $weight;
+            $totalWeight += $weight;
+        }
+
+        $overallPercentage = $totalWeight > 0 ? round($totalWeightedScore / $totalWeight) : 0;
+
+        return [
+            'percentage' => $overallPercentage,
+            'level' => $this->getMaturityLevel($overallPercentage)
         ];
     }
 
@@ -551,55 +359,29 @@ class DigitalMaturityAssessment extends Component
         if ($percentage >= 21 && $percentage <= 40) return 'Developing/Emerging';
         if ($percentage >= 0 && $percentage <= 20) return 'Novice/Beginner';
         return 'Novice/Beginner';
-    }
-
-    public function calculateOverallScore($scores)
-    {
-        if (empty($scores)) {
-            return [
-                'percentage' => 0,
-                'level' => 'Novice/Beginner'
-            ];
-        }
-
-        $totalPercentage = 0;
-        $sectionsCount = count($scores);
-
-        foreach ($scores as $score) {
-            $totalPercentage += $score['percentage'];
-        }
-
-        $averagePercentage = round($totalPercentage / $sectionsCount);
-
-        return [
-            'percentage' => $averagePercentage,
-            'level' => $this->getMaturityLevel($averagePercentage)
-        ];
+        
     }
 
     public function render()
     {
-        $sectionNames = array_keys($this->sections);
-        $currentSectionName = $this->currentSection >= 0 ? $sectionNames[$this->currentSection] : 'Basic Information';
+        $currentSectionName = $this->currentSection >= 0 ? $this->sectionNames[$this->currentSection] : 'Basic Information';
 
         $scores = [];
         $overallScore = null;
 
         if ($this->showResults) {
-            foreach ($this->sections as $sectionName => $questions) {
+            foreach ($this->sectionNames as $sectionName) {
                 $scores[$sectionName] = $this->calculateSectionScore($sectionName);
             }
             $overallScore = $this->calculateOverallScore($scores);
-
         }
 
         return view('livewire.digital-maturity-assessment', [
             'sections' => $this->sections,
             'currentSectionName' => $currentSectionName,
-            'sectionNames' => $sectionNames,
+            'sectionNames' => $this->sectionNames,
             'scores' => $scores,
             'overallScore' => $overallScore,
         ]);
     }
-
 }
