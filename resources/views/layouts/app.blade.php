@@ -39,7 +39,7 @@
       <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200 px-4 pb-4">
   
         <a href="{{ route('login') }}" class="block py-2 text-green-900 font-medium hover:text-green-700">Administrator</a>
-        <a href="#" class="block py-2 mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition w-full text-center">Take DMA</a>
+        <a href="{{ route('dma') }}" class="block py-2 mt-2 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition w-full text-center">Take DMA</a>
       </div>
     </nav>
 
