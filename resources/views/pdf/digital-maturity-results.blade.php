@@ -62,7 +62,7 @@
 
     <div class="header">
         <h1>Digital Maturity Assessment Results</h1>
-        <p>Report for: {{ $respondentName }}</p>
+        <p>Report for: {{ $businessName }}</p>
         <p>Date: {{ now()->format('F d, Y') }}</p>
     </div>
 

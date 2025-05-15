@@ -18,17 +18,17 @@
       <div class="flex items-center gap-3 mt-4">
         <!-- Avatars -->
         <div class="flex -space-x-2">
-          <img src="{{ asset('images/african-business-man-1.jpg') }}" class="w-8 h-8 rounded-full border-2 border-white" />
-          <img src="{{ asset('images/african-business-woman-1.jpg') }}" class="w-8 h-8 rounded-full border-2 border-white" />
-          <img src="{{ asset('images/african-business-man-2.jpg') }}" class="w-8 h-8 rounded-full border-2 border-white" />
+          <img src="{{ asset('images/businesses/1.avif') }}" class="w-8 h-8 rounded-full border-2 border-white" />
+          <img src="{{ asset('images/businesses/2.avif') }}" class="w-8 h-8 rounded-full border-2 border-white" />
+          <img src="{{ asset('images/businesses/3.avif') }}" class="w-8 h-8 rounded-full border-2 border-white" />
         </div>
-        <span class="text-white text-sm sm:text-base font-semibold ml-2">500+ businesses already assessed</span>
+        <span class="text-white text-sm sm:text-base font-semibold ml-2">100+ businesses already assessed</span>
       </div>
     </div>
     <!-- Right: Image Placeholder with badge -->
     <div class="md:w-1/2 flex justify-center mt-12 md:mt-0 relative w-full">
       <div class="bg-gray-100 rounded-xl w-full max-w-[350px] sm:max-w-[420px] md:max-w-[580px] h-[220px] sm:h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden relative">
-        <img src="https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
+        <img src="{{ asset('images/banner.jpg') }}" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
         <span class="absolute top-4 right-4 bg-white text-green-900 font-bold px-4 py-2 rounded-full text-xs sm:text-sm shadow">15-min assessment</span>
       </div>
     </div>
@@ -39,13 +39,11 @@
 <section class="bg-white py-16 md:py-20">
   <div class="container mx-auto px-4 md:px-6">
     <h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold text-green-900 text-center mb-6">What is a Digital Maturity Assessment?</h2>
-    <p class="text-base sm:text-xl text-gray-600 text-center max-w-3xl mx-auto mb-12 md:mb-16">A Digital Maturity Assessment (DMA) is a comprehensive evaluation of an organization's digital capabilities, processes, and culture. It helps identify strengths, weaknesses, and opportunities for digital transformation.</p>
+    <p class="text-base sm:text-xl text-gray-600 text-center max-w-3xl mx-auto mb-12 md:mb-16">A Digital Maturity Assessment (DMA) is a comprehensive evaluation of an organisation's digital capabilities, processes, and culture. It helps identify strengths, weaknesses, and opportunities for digital transformation.</p>
     <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto">
       <!-- Left: Image Placeholder -->
       <div class="bg-gray-100 rounded-xl w-full max-w-[420px] h-[180px] sm:h-[240px] flex items-center justify-center mb-8 md:mb-0">
-        <span class="text-gray-300 text-4xl">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="10" stroke-width="2"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5" /></svg>
-        </span>
+       <img src="{{ asset('images/cta.jpg') }}" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
       </div>
       <!-- Right: Features List -->
       <div class="flex-1 w-full">
@@ -56,7 +54,7 @@
             </span>
             <div>
               <span class="font-bold text-green-900">Benchmark Your Digital Capabilities</span>
-              <p class="text-gray-600">Compare your organization's digital maturity against industry standards and competitors.</p>
+              <p class="text-gray-600">Compare your organisation's digital maturity against industry standards and competitors.</p>
             </div>
           </li>
           <li class="flex items-start gap-4">
@@ -97,7 +95,7 @@
           </span>
           <span class="font-bold text-lg md:text-xl text-green-900">Internet Access, Technology Use and Digital Readiness</span>
         </div>
-        <p class="text-gray-600 text-sm md:text-base">Assess your organization's connectivity infrastructure, technology adoption levels, and overall preparedness for digital initiatives.</p>
+        <p class="text-gray-600 text-sm md:text-base">Assess your organisation's connectivity infrastructure, technology adoption levels, and overall preparedness for digital initiatives.</p>
       </div>
       <!-- Module 2 -->
       <div class="bg-white rounded-xl border border-green-100 p-6 md:p-8 shadow-sm">
@@ -107,7 +105,7 @@
           </span>
           <span class="font-bold text-lg md:text-xl text-green-900">Digitalisation of Business Processes, People and Skills</span>
         </div>
-        <p class="text-gray-600 text-sm md:text-base">Evaluate how effectively your organization has digitized workflows, developed talent, and built digital competencies across teams.</p>
+        <p class="text-gray-600 text-sm md:text-base">Evaluate how effectively your organisation has digitized workflows, developed talent, and built digital competencies across teams.</p>
       </div>
       <!-- Module 3 -->
       <div class="bg-white rounded-xl border border-green-100 p-6 md:p-8 shadow-sm">
@@ -117,7 +115,7 @@
           </span>
           <span class="font-bold text-lg md:text-xl text-green-900">Digital Presence &amp; Data Management</span>
         </div>
-        <p class="text-gray-600 text-sm md:text-base">Measure your organization's online visibility, brand consistency across digital channels, and capabilities for collecting and utilizing data effectively.</p>
+        <p class="text-gray-600 text-sm md:text-base">Measure your organisation's online visibility, brand consistency across digital channels, and capabilities for collecting and utilizing data effectively.</p>
       </div>
       <!-- Module 4 -->
       <div class="bg-white rounded-xl border border-green-100 p-6 md:p-8 shadow-sm">
@@ -137,7 +135,7 @@
           </span>
           <span class="font-bold text-lg md:text-xl text-green-900">Green Digitalisation &amp; Readiness for Digital Transformation</span>
         </div>
-        <p class="text-gray-600 text-sm md:text-base">Evaluate your sustainable digital practices and overall organizational preparedness to embrace and implement digital transformation initiatives.</p>
+        <p class="text-gray-600 text-sm md:text-base">Evaluate your sustainable digital practices and overall organisational preparedness to embrace and implement digital transformation initiatives.</p>
       </div>
       <!-- Module 6 -->
       <div class="bg-white rounded-xl border border-green-100 p-6 md:p-8 shadow-sm">
@@ -157,7 +155,7 @@
 <section class="bg-white py-16 md:py-20">
   <div class="container mx-auto px-4 md:px-6">
     <h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold text-green-900 text-center mb-6">Our Partners</h2>
-    <p class="text-base sm:text-xl text-gray-500 text-center max-w-4xl mx-auto mb-12 md:mb-16">We collaborate with leading organizations to deliver comprehensive digital maturity assessments and transformation strategies.</p>
+    <p class="text-base sm:text-xl text-gray-500 text-center max-w-4xl mx-auto mb-12 md:mb-16">We collaborate with leading organisations to deliver comprehensive digital maturity assessments and transformation strategies.</p>
     <div class="flex justify-center">
       <div class="max-w-4xl mx-auto">
         <img src="{{ asset('images/partners/partner-logos.png') }}" alt="Logo" class="w-full">
@@ -172,7 +170,7 @@
     <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white text-center mb-6">Ready to Assess Your Digital Maturity?</h2>
     <p class="text-lg sm:text-2xl text-gray-100 text-center mb-8 md:mb-12 max-w-3xl">Take the first step towards digital transformation by understanding where you stand today.</p>
     <div class="flex flex-col md:flex-row gap-4 justify-center items-center w-full max-w-xl">
-      <button class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition w-full md:w-auto">Start Your Assessment</button>
+      <a href="{{ route('dma') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition w-full md:w-auto">Start Your Assessment</a>
     </div>
   </div>
 </section>

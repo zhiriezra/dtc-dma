@@ -32,7 +32,7 @@
         <div class="hidden md:flex items-center gap-8">
           
           <a href="{{ route('login') }}" class="text-green-900 font-medium hover:text-green-700">Administrator</a>
-          <a href="{{ route('dma') }}" class="ml-4 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition">Take DMA</a>
+          <a href="{{ route('dma') }}" class="ml-4 bg-green-500 hover:bg-green-600 text-white font-semibold px-5 py-2 rounded-lg transition">Take Assessment</a>
         </div>
       </div>
       <!-- Mobile Nav -->

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DspController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,13 @@ Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':2'])->group
     Route::get('/dsp', [DspController::class, 'index'])->name('dsp');
     Route::get('/new-assessments', [DspController::class, 'newAssessments'])->name('new-assessments');
     Route::get('/dsp-assessments', [DspController::class, 'dspAssessments'])->name('dsp-assessments');
+});
+
+// Profile Management Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
 });
 
 

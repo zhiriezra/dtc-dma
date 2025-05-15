@@ -35,6 +35,13 @@ class ManageUser extends Component
     public function mount()
     {
         $this->role_id = Role::where('slug', 'dsp')->first()->id;
+        $this->resetForm();
+    }
+
+    public function resetForm()
+    {
+        $this->reset(['name', 'email', 'password', 'is_active', 'phone', 'state']);
+        $this->editingUserId = null;
     }
 
     public function createUser()
@@ -105,7 +112,8 @@ class ManageUser extends Component
     public function toggleStatus($userId)
     {
         $user = User::find($userId);
-        $user->update(['is_active' => !$user->is_active]);
+        $user->is_active = !$user->is_active;
+        $user->save();
         session()->flash('message', 'DSP account status updated successfully.');
     }
 

@@ -16,7 +16,7 @@
             <div class="w-1/3">
                 <input type="text" wire:model.live="search" placeholder="Search DSP accounts..." class="w-full border rounded p-2">
             </div>
-            <button wire:click="$set('editingUserId', null)" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+            <button wire:click="resetForm" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                 Add New DSP Account
             </button>
         </div>
@@ -181,7 +181,7 @@
                         <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                             Update DSP Account
                         </button>
-                        <button type="button" wire:click="$set('editingUserId', null)" class="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                        <button type="button" wire:click="resetForm" class="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                             Cancel
                         </button>
                     </div>

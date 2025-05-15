@@ -15,13 +15,13 @@ class DigitalMaturityResults extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $categoryScores, $totalScore, $respondentName;
+    public $categoryScores, $totalScore, $businessName;
 
-    public function __construct($categoryScores, $totalScore, $respondentName)
+    public function __construct($categoryScores, $totalScore, $businessName)
     {
         $this->categoryScores = $categoryScores;
         $this->totalScore = $totalScore;
-        $this->respondentName = $respondentName;
+        $this->businessName = $businessName;
     }
     /**
      * Get the message envelope.
@@ -53,7 +53,7 @@ class DigitalMaturityResults extends Mailable
         $pdf = PDF::loadView('pdf.digital-maturity-results', [
             'categoryScores' => $this->categoryScores,
             'totalScore' => $this->totalScore,
-            'respondentName' => $this->respondentName
+            'businessName' => $this->businessName
         ]);
 
         return [

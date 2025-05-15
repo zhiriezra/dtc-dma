@@ -247,7 +247,7 @@ class DigitalMaturityAssessment extends Component
                 ->send(new DigitalMaturityResults(
                     $scores,
                     $overallScore,
-                    $this->personalInfo['respondent_name']
+                    $this->businessInfo['business_name']
                 ));
 
             $this->showResults = true;
