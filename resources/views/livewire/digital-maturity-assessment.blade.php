@@ -309,6 +309,10 @@
         @else
             <!-- Results Section -->
             <div class="space-y-6 sm:space-y-8">
+                <div class="flex justify-center space-x-4">
+                    <img src="{{ asset('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo" class="h-16">
+                    <img src="{{ asset('images/partners/partner-logos.png') }}" alt="Partner Logo" class="h-16">
+                </div>
                 <h2 class="text-xl sm:text-2xl font-bold">Digital Maturity Assessment Results: {{ $businessInfo['business_name'] }}</h2>
                 <!-- Overall Score Card -->
                 @php
@@ -393,20 +397,30 @@
                                 <div class="{{ $sectionProgressColor }} h-2.5 rounded-full"
                                     style="width: {{ $score['percentage'] }}%"></div>
                             </div>
-                            <div class="flex justify-between items-center text-sm text-gray-600">
+                            <!-- <div class="flex justify-between items-center text-sm text-gray-600">
                                 <span>Section Weight</span>
                                 <span>{{ number_format($sections[$sectionName]['weight'] * 100, 0) }}%</span>
                             </div>
                             <div class="flex justify-between items-center text-sm text-gray-600">
                                 <span>Contribution to Overall</span>
                                 <span>{{ number_format(($score['scaled_percentage'] * $sections[$sectionName]['weight']), 1) }}%</span>
-                            </div>
+                            </div> -->
                             <p class="mt-2">
                                 Maturity Level:
                                 <span class="font-bold {{ $sectionTextColor }}">
                                     {{ $level }}
                                 </span>
                             </p>
+                            @if($sectionName !== 'Validation Section')
+                                <div class="mt-4">
+                                    <h4 class="text-sm font-semibold mb-2">Recommendations:</h4>
+                                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                                        @foreach($this->getSectionRecommendations($sectionName, $level) as $recommendation)
+                                            <li>{{ $recommendation }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach
@@ -414,9 +428,9 @@
 
             <!-- Action Buttons -->
             <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4">
-                <button onclick="window.print()"
+                <button wire:click="downloadPDF"
                         class="w-full sm:w-auto bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 text-base">
-                    Print Results
+                    Download PDF
                 </button>
                 <button onclick="window.location.reload()"
                         class="w-full sm:w-auto bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 text-base">

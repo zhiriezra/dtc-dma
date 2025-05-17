@@ -34,6 +34,18 @@
             font-weight: bold;
             color: #0056b3;
         }
+        .recommendations {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+        .recommendations ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .recommendations li {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -48,12 +60,24 @@
             <p>Your Digital Maturity Level: <span class="maturity-level">{{ $totalScore['level'] }}</span></p>
         </div>
 
-        <h3>Section Scores:</h3>
+        <h3>Section Scores and Recommendations:</h3>
         @foreach($categoryScores as $section => $score)
             <div class="score-section">
                 <h4>{{ $section }}</h4>
                 <p>Score: {{ $score['percentage'] }}%</p>
                 <p>Points: {{ $score['score'] }}/{{ $score['max'] }}</p>
+                <p>Maturity Level: <span class="maturity-level">{{ $score['level'] }}</span></p>
+                
+                @if($section !== 'Validation Section')
+                    <div class="recommendations">
+                        <h5>Recommendations:</h5>
+                        <ul>
+                            @foreach($score['recommendations'] as $recommendation)
+                                <li>{{ $recommendation }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </div>
         @endforeach
 
