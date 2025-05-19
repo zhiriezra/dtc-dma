@@ -538,7 +538,13 @@ class DigitalMaturityAssessment extends Component
     {
         $scores = [];
         foreach ($this->sectionNames as $sectionName) {
-            $scores[$sectionName] = $this->calculateSectionScore($sectionName);
+            $score = $this->calculateSectionScore($sectionName);
+            // Add level and recommendations to the score array
+            $score['level'] = $this->getMaturityLevel($score['percentage']);
+            if ($sectionName !== 'Validation Section') {
+                $score['recommendations'] = $this->getSectionRecommendations($sectionName, $score['level']);
+            }
+            $scores[$sectionName] = $score;
         }
         $overallScore = $this->calculateOverallScore($scores);
 

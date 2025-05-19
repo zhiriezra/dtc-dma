@@ -81,6 +81,64 @@
   </div>
 </section>
 
+<!-- Video Section with Language Selection -->
+<section class="bg-white py-8 md:py-20">
+  <div class="container mx-auto px-4 md:px-6">
+    <h2 class="text-xl sm:text-3xl md:text-4xl font-extrabold text-green-900 text-center mb-4 md:mb-6">Watch Our Introduction</h2>
+    <p class="text-sm sm:text-lg text-gray-600 text-center max-w-4xl mx-auto mb-6 md:mb-8">Select your preferred language to watch our introduction video</p>
+    
+    <!-- Language Selection -->
+    <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6 md:mb-8">
+      <button onclick="changeVideo('en')" class="language-btn active bg-green-500 text-white px-3 py-2 rounded-lg text-sm md:text-base" data-lang="en">English</button>
+      <button onclick="changeVideo('yo')" class="language-btn bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm md:text-base" data-lang="yo">Yoruba</button>
+      <button onclick="changeVideo('ig')" class="language-btn bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm md:text-base" data-lang="ig">Igbo</button>
+      <button onclick="changeVideo('ha')" class="language-btn bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm md:text-base" data-lang="ha">Hausa</button>
+      <button onclick="changeVideo('pi')" class="language-btn bg-gray-200 text-gray-700 px-3 py-2 rounded-lg text-sm md:text-base" data-lang="pi">Pidgin</button>
+    </div>
+
+    <!-- Video Container -->
+    <div class="max-w-full md:max-w-4xl mx-auto aspect-video bg-gray-100 rounded-xl overflow-hidden">
+      <div id="video-container">
+        <!-- English Video (Default) -->
+        <div id="video-en" class="video-content">
+          <video class="w-full h-full" controls>
+            <source src="{{ asset('videos/english_optimised.mov') }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <!-- Yoruba Video -->
+        <div id="video-yo" class="video-content hidden">
+          <video class="w-full h-full" controls>
+            <source src="{{ asset('videos/yoruba_optimised.mov') }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <!-- Igbo Video -->
+        <div id="video-ig" class="video-content hidden">
+          <video class="w-full h-full" controls>
+            <source src="{{ asset('videos/igbo_optimised.mov') }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <!-- Hausa Video -->
+        <div id="video-ha" class="video-content hidden">
+          <video class="w-full h-full" controls>
+            <source src="{{ asset('videos/hausa_optimised.mov') }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+        <!-- Pidgin Video -->
+        <div id="video-pi" class="video-content hidden">
+          <video class="w-full h-full" controls>
+            <source src="{{ asset('videos/pidgin_optimised.mov') }}" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- 6 Modules of Digital Maturity Section -->
 <section class="bg-green-50 py-16 md:py-20">
   <div class="container mx-auto px-4 md:px-6">
@@ -197,6 +255,32 @@
       });
     }
   });
+
+  // Video language switcher
+  function changeVideo(lang) {
+    // Pause all videos
+    document.querySelectorAll('video').forEach(video => {
+      video.pause();
+    });
+    
+    // Hide all videos
+    document.querySelectorAll('.video-content').forEach(video => {
+      video.classList.add('hidden');
+    });
+    
+    // Show selected video
+    document.getElementById(`video-${lang}`).classList.remove('hidden');
+    
+    // Update button styles
+    document.querySelectorAll('.language-btn').forEach(btn => {
+      btn.classList.remove('bg-green-500', 'text-white');
+      btn.classList.add('bg-gray-200', 'text-gray-700');
+    });
+    
+    // Highlight selected button
+    document.querySelector(`[data-lang="${lang}"]`).classList.remove('bg-gray-200', 'text-gray-700');
+    document.querySelector(`[data-lang="${lang}"]`).classList.add('bg-green-500', 'text-white');
+  }
 </script>
 @endpush
 
