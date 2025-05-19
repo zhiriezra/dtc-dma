@@ -410,12 +410,16 @@ class DigitalMaturityAssessment extends Component
             ]);
 
             // Send email with results
-            Mail::to($this->personalInfo['email'])
-                ->send(new DigitalMaturityResults(
-                    $scores,
-                    $overallScore,
-                    $this->businessInfo['business_name']
-                ));
+            try {
+                Mail::to($this->personalInfo['email'])
+                    ->send(new DigitalMaturityResults(
+                        $scores,
+                        $overallScore,
+                        $this->businessInfo['business_name']
+                    ));
+            } catch (\Exception $e) {
+                dd('Mail send error: ', $e->getMessage());
+            }
 
             $this->showResults = true;
         } catch (\Exception $e) {
