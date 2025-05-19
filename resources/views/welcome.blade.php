@@ -102,35 +102,35 @@
         <!-- English Video (Default) -->
         <div id="video-en" class="video-content">
           <video class="w-full h-full" controls>
-            <source src="{{ asset('videos/english.mov') }}" type="video/mp4">
+            <source src="{{ asset('videos/english.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>
         <!-- Yoruba Video -->
         <div id="video-yo" class="video-content hidden">
           <video class="w-full h-full" controls>
-            <source src="{{ asset('videos/yoruba.mov') }}" type="video/mp4">
+            <source src="{{ asset('videos/yoruba.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>
         <!-- Igbo Video -->
         <div id="video-ig" class="video-content hidden">
           <video class="w-full h-full" controls>
-            <source src="{{ asset('videos/igbo.mov') }}" type="video/mp4">
+            <source src="{{ asset('videos/igbo.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>
         <!-- Hausa Video -->
         <div id="video-ha" class="video-content hidden">
           <video class="w-full h-full" controls>
-            <source src="{{ asset('videos/hausa.mov') }}" type="video/mp4">
+            <source src="{{ asset('videos/hausa.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>
         <!-- Pidgin Video -->
         <div id="video-pi" class="video-content hidden">
           <video class="w-full h-full" controls>
-            <source src="{{ asset('videos/pidgin.mov') }}" type="video/mp4">
+            <source src="{{ asset('videos/pidgin.mp4') }}" type="video/mp4">
             Your browser does not support the video tag.
           </video>
         </div>
