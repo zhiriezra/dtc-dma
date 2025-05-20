@@ -6,14 +6,14 @@
   <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-6 py-10 md:py-16">
     <!-- Left: Text -->
     <div class="md:w-1/2 text-white w-full">
-      <div class="text-sm font-semibold mb-2">SMEDAN Initiative</div>
+      <div class="text-sm font-semibold mb-2">SMEDAN & DTC Initiative</div>
       <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
         Digital Maturity <span class="text-green-400">Assessment for</span><br>MSMEs!
       </h1>
-      <p class="text-base sm:text-lg mb-8">Unlock your business potential with our cutting-edge assessment tool.<br>In just 15 minutes, discover where you stand and get a personilized roadmap to digital success.</p>
+      <p class="text-base sm:text-lg mb-8">Unlock your business potential with our cutting-edge assessment tool.<br>In just 15 minutes, discover where you stand and get a personalised roadmap to digital success.</p>
       <div class="flex flex-col sm:flex-row gap-4 mb-8 w-full">
         <a href="{{ route('dma') }}" class="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition flex items-center gap-2 w-full sm:w-auto justify-center">Start Assessment <span>&rarr;</span></a>
-        <button class="border border-white text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition hover:bg-white hover:text-green-900 w-full sm:w-auto justify-center">Learn More</button>
+        <a href="{{ route('definitions') }}" class="border border-white text-white font-bold px-6 py-3 sm:px-8 sm:py-4 rounded-lg text-base sm:text-lg transition hover:bg-white hover:text-green-900 w-full sm:w-auto justify-center">Learn More</a>
       </div>
       <div class="flex items-center gap-3 mt-4">
         <!-- Avatars -->
@@ -30,6 +30,7 @@
       <div class="bg-gray-100 rounded-xl w-full max-w-[350px] sm:max-w-[420px] md:max-w-[580px] h-[220px] sm:h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden relative">
         <img src="{{ asset('images/banner.jpg') }}" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
         <span class="absolute top-4 right-4 bg-white text-green-900 font-bold px-4 py-2 rounded-full text-xs sm:text-sm shadow">15-min assessment</span>
+        <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">Generated on google labs</span>
       </div>
     </div>
   </div>
@@ -42,8 +43,9 @@
     <p class="text-base sm:text-xl text-gray-600 text-center max-w-3xl mx-auto mb-12 md:mb-16">A Digital Maturity Assessment (DMA) is a comprehensive evaluation of an organisation's digital capabilities, processes, and culture. It helps identify strengths, weaknesses, and opportunities for digital transformation.</p>
     <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 max-w-6xl mx-auto">
       <!-- Left: Image Placeholder -->
-      <div class="bg-gray-100 rounded-xl w-full max-w-[420px] h-[180px] sm:h-[240px] flex items-center justify-center mb-8 md:mb-0">
+      <div class="bg-gray-100 rounded-xl w-full max-w-[420px] h-[180px] sm:h-[240px] flex items-center justify-center mb-8 md:mb-0 relative">
        <img src="{{ asset('images/cta.jpg') }}" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
+       <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">Generated on google labs</span>
       </div>
       <!-- Right: Features List -->
       <div class="flex-1 w-full">
@@ -163,7 +165,7 @@
           </span>
           <span class="font-bold text-lg md:text-xl text-green-900">Digitalisation of Business Processes, People and Skills</span>
         </div>
-        <p class="text-gray-600 text-sm md:text-base">Evaluate how effectively your organisation has digitized workflows, developed talent, and built digital competencies across teams.</p>
+        <p class="text-gray-600 text-sm md:text-base">Evaluate how effectively your organisation has digitised workflows, developed talent, and built digital competencies across teams.</p>
       </div>
       <!-- Module 3 -->
       <div class="bg-white rounded-xl border border-green-100 p-6 md:p-8 shadow-sm">
@@ -173,7 +175,7 @@
           </span>
           <span class="font-bold text-lg md:text-xl text-green-900">Digital Presence &amp; Data Management</span>
         </div>
-        <p class="text-gray-600 text-sm md:text-base">Measure your organisation's online visibility, brand consistency across digital channels, and capabilities for collecting and utilizing data effectively.</p>
+        <p class="text-gray-600 text-sm md:text-base">Measure your organisation's online visibility, brand consistency across digital channels, and capabilities for collecting and utilising data effectively.</p>
       </div>
       <!-- Module 4 -->
       <div class="bg-white rounded-xl border border-green-100 p-6 md:p-8 shadow-sm">

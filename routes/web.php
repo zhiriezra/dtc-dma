@@ -22,6 +22,10 @@ Route::get('dma', function () {
     return view('dma');
 })->name('dma');
 
+Route::get('/definitions', function () {
+    return view('definitions');
+})->name('definitions');
+
 // Admin routes (role_id = 1)
 Route::middleware(['auth', \App\Http\Middleware\CheckRole::class . ':1'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');

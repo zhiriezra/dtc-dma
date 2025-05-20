@@ -24,6 +24,8 @@
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
         .overall-score {
             text-align: center;
@@ -109,9 +111,8 @@
 </head>
 <body>
     <div class="logo">
-        <div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+        <div style="display: flex; justify-content: center; align-items: center;">
             <img src="{{ public_path('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo">
-            <img src="{{ public_path('images/partners/partner-logos.png') }}" alt="Partner Logo">
         </div>
     </div>
 
@@ -193,6 +194,9 @@
     <div class="footer">
         <p>This report was generated automatically by the Digital Maturity Assessment System.</p>
         <p>© {{ date('Y') }} Digital Maturity Assessment. All rights reserved.</p>
+        <div style="margin-top: 20px;">
+            <img src="{{ public_path('images/partners/partner-logos.png') }}" alt="Partner Logo">
+        </div>
     </div>
 </body>
 </html> 

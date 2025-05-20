@@ -311,7 +311,6 @@
             <div class="space-y-6 sm:space-y-8">
                 <div class="flex justify-center space-x-4">
                     <img src="{{ asset('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo" class="h-16">
-                    <img src="{{ asset('images/partners/partner-logos.png') }}" alt="Partner Logo" class="h-16">
                 </div>
                 <h2 class="text-xl sm:text-2xl font-bold">Digital Maturity Assessment Results: {{ $businessInfo['business_name'] }}</h2>
                 <!-- Overall Score Card -->
@@ -425,9 +424,14 @@
                     </div>
                 @endforeach
             </div>
+            
+            <div class="w-full flex justify-center mb-6">
+                <img src="{{ asset('images/partners/partner-logos.png') }}" alt="Partner Logo" class="h-32">
+            </div>
 
             <!-- Action Buttons -->
             <div class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-4">
+                
                 <button wire:click="downloadPDF"
                         class="w-full sm:w-auto bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 text-base">
                     Download PDF
