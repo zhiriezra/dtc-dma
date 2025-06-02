@@ -6,7 +6,7 @@
   <div class="container mx-auto flex flex-col md:flex-row items-center justify-between px-4 md:px-6 py-10 md:py-16">
     <!-- Left: Text -->
     <div class="md:w-1/2 text-white w-full">
-      <div class="text-sm font-semibold mb-2">SMEDAN & DTC Initiative</div>
+      <div class="text-sm font-semibold mb-2">SMEDAN & GIZ-DTC Initiative</div>
       <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
         Digital Maturity <span class="text-green-400">Assessment for</span><br>MSMEs!
       </h1>

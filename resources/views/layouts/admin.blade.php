@@ -21,7 +21,7 @@
             <div class="flex flex-col w-64 bg-green-800">
                 <div class="flex items-center justify-center h-20 bg-green-900">
                     <a href="{{ route('dashboard') }}">
-                        <img class="h-12" src="{{ asset('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo">
+                        <img class="h-12" src="{{ asset('images/logos/smedan-logo.svg') }}" alt="SMEDAN Logo">
                     </a>
                 </div>
                 <div class="flex flex-col flex-grow px-4 py-4 overflow-y-auto">

@@ -4,7 +4,7 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg">
         <div>
-            <img class="mx-auto h-20" src="{{ asset('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo">
+            <img class="mx-auto h-20" src="{{ asset('images/logos/smedan-logo.svg') }}" alt="SMEDAN Logo">
             <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                 Administrator Login
             </h2>
