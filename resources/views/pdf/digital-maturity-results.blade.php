@@ -65,7 +65,7 @@
             margin-bottom: 30px;
         }
         .logo img {
-            max-height: 80px;
+            max-height: 100px;
             margin: 0 10px;
         }
         .progress-bar {

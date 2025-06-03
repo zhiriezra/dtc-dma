@@ -10,6 +10,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/pdf/digital-maturity-results', function () {
+    return view('pdf.digital-maturity-results');
+})->name('digital-maturity-results');
+
 Route::get('/about', function () {
     return view('about');
 });
