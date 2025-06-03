@@ -310,7 +310,7 @@
             <!-- Results Section -->
             <div class="space-y-6 sm:space-y-8">
                 <div class="flex justify-center space-x-4">
-                    <img src="{{ asset('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo" class="h-16">
+                    <img src="{{ asset('images/logos/smedan-logo.svg') }}" alt="SMEDAN Logo" class="h-16">
                 </div>
                 <h2 class="text-xl sm:text-2xl font-bold">Digital Maturity Assessment Results: {{ $businessInfo['business_name'] }}</h2>
                 <!-- Overall Score Card -->

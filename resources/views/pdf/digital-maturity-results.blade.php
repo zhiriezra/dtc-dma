@@ -112,7 +112,7 @@
 <body>
     <div class="logo">
         <div style="display: flex; justify-content: center; align-items: center;">
-            <img src="{{ public_path('images/logos/smedan-logo.png') }}" alt="SMEDAN Logo">
+            <img src="{{ public_path('images/logos/smedan-logo.svg') }}" alt="SMEDAN Logo">
         </div>
     </div>
 
@@ -191,12 +191,10 @@
         @endforeach
     </div>
 
-    <div class="footer">
+    <div class="footer flex flex-col items-center justify-center">
         <p>This report was generated automatically by the Digital Maturity Assessment System.</p>
         <p>© {{ date('Y') }} Digital Maturity Assessment. All rights reserved.</p>
-        <div style="margin-top: 20px;">
-            <img src="{{ public_path('images/partners/partner-logos.png') }}" alt="Partner Logo">
-        </div>
+        <img src="{{ public_path('images/partners/partner-logos.png') }}" alt="Partner Logo" style="width: 30%;">
     </div>
 </body>
 </html> 

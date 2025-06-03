@@ -30,7 +30,7 @@
       <div class="bg-gray-100 rounded-xl w-full max-w-[350px] sm:max-w-[420px] md:max-w-[580px] h-[220px] sm:h-[300px] md:h-[400px] flex items-center justify-center overflow-hidden relative">
         <img src="{{ asset('images/banner.jpg') }}" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
         <span class="absolute top-4 right-4 bg-white text-green-900 font-bold px-4 py-2 rounded-full text-xs sm:text-sm shadow">15-min assessment</span>
-        <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">Generated on google labs</span>
+        <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded"><a href="https://labs.google/fx/tools/image-fx" target="_blank">Generated on google labs</a></span>
       </div>
     </div>
   </div>
@@ -45,7 +45,7 @@
       <!-- Left: Image Placeholder -->
       <div class="bg-gray-100 rounded-xl w-full max-w-[420px] h-[180px] sm:h-[240px] flex items-center justify-center mb-8 md:mb-0 relative">
        <img src="{{ asset('images/cta.jpg') }}" alt="Assessment" class="object-cover w-full h-full rounded-xl" />
-       <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">Generated on google labs</span>
+       <span class="absolute bottom-2 right-2 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded"><a href="https://labs.google/fx/tools/image-fx" target="_blank">Generated on google labs</a></span>
       </div>
       <!-- Right: Features List -->
       <div class="flex-1 w-full">
