@@ -19,7 +19,7 @@
         <!-- Sidebar -->
         <div class="hidden md:flex md:flex-shrink-0">
             <div class="flex flex-col w-64 bg-green-800">
-                <div class="flex items-center justify-center h-20 bg-green-900">
+                <div class="flex items-center justify-center h-20 bg-white">
                     <a href="{{ route('dashboard') }}">
                         <img class="h-12" src="{{ asset('images/logos/smedan-logo.svg') }}" alt="SMEDAN Logo">
                     </a>
@@ -80,7 +80,7 @@
         <!-- Main Content -->
         <div class="flex flex-col flex-1 w-0 overflow-hidden">
             <!-- Top Navigation -->
-            <div class="relative z-10 flex flex-shrink-0 h-16 bg-white shadow">
+            <div class="relative z-10 flex flex-shrink-0 h-20 bg-white shadow">
                 <button class="px-4 text-gray-500 border-r border-gray-200 focus:outline-none md:hidden" 
                         onclick="document.querySelector('.md\\:flex-shrink-0').classList.toggle('hidden')">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
