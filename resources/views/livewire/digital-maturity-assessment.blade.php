@@ -32,6 +32,19 @@
                 </div>
 
                 <div>
+                    <label class="block mb-2 text-sm sm:text-base font-medium">Migration Status *</label>
+                    <select wire:model="personalInfo.migration_status" class="w-full border rounded-lg p-3 text-base">
+                        <option value="">Select Migration Status</option>
+                        <option value="Internal">Internal</option>
+                        <option value="Returnee">Returnee</option>
+                        <option value="Refugee">Refugee</option>
+                        <option value="IDP">IDP</option>
+                        <option value="Host">Host</option>
+                    </select>
+                    @error('personalInfo.migration_status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div>
                     <label class="block mb-2 text-sm sm:text-base font-medium">Phone Number 1 *</label>
                     <input type="tel" wire:model="personalInfo.phone_number_1" class="w-full border rounded-lg p-3 text-base">
                     @error('personalInfo.phone_number_1') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror

@@ -24,6 +24,7 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Business Name</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Respondent</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">State</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Migration Status</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Score</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
@@ -41,6 +42,9 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $questionnaire->state }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{ $questionnaire->migration_status }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="text-sm text-gray-900">{{ $questionnaire->overall_score }}%</div>
@@ -111,11 +115,15 @@
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Phone</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedQuestionnaire->phone_number }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedQuestionnaire->phone_number_1 }}</dd>
+                                </div>
+                                <div>
+                                    <dt class="text-sm font-medium text-gray-500">Migration Status</dt>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedQuestionnaire->migration_status }}</dd>
                                 </div>
                                 <div>
                                     <dt class="text-sm font-medium text-gray-500">Role</dt>
-                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedQuestionnaire->role }}</dd>
+                                    <dd class="mt-1 text-sm text-gray-900">{{ $selectedQuestionnaire->business_role }}</dd>
                                 </div>
                             </dl>
                         </div>

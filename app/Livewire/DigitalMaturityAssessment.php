@@ -27,6 +27,7 @@ class DigitalMaturityAssessment extends Component
     public $personalInfo = [
         'respondent_name' => '',
         'gender' => '',
+        'migration_status' => '',
         'phone_number_1' => '',
         'phone_number_2' => '',
         'email' => '',
@@ -56,6 +57,7 @@ class DigitalMaturityAssessment extends Component
         // Personal Information Validation
         'personalInfo.respondent_name' => 'required',
         'personalInfo.gender' => 'required',
+        'personalInfo.migration_status' => 'required',
         'personalInfo.phone_number_1' => 'required',
         'personalInfo.phone_number_2' => 'required',
         'personalInfo.email' => 'required|email',
@@ -82,6 +84,7 @@ class DigitalMaturityAssessment extends Component
         // Personal Information Messages
         'personalInfo.respondent_name.required' => 'Please enter your name',
         'personalInfo.gender.required' => 'Please select your gender',
+        'personalInfo.migration_status.required' => 'Please select your migration status',
         'personalInfo.phone_number_1.required' => 'Please enter your primary phone number',
         'personalInfo.phone_number_2.required' => 'Please enter your secondary phone number',
         'personalInfo.email.required' => 'Please enter your email address',
@@ -380,6 +383,7 @@ class DigitalMaturityAssessment extends Component
                 // Personal Information
                 'respondent_name' => $this->personalInfo['respondent_name'],
                 'gender' => $this->personalInfo['gender'],
+                'migration_status' => $this->personalInfo['migration_status'],
                 'phone_number_1' => $this->personalInfo['phone_number_1'],
                 'phone_number_2' => $this->personalInfo['phone_number_2'],
                 'email' => $this->personalInfo['email'],
